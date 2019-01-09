@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using LuaInterface;
+using UnityEngine;
 
 public class FirstLua : MonoBehaviour {
 
-    /*#region lua DoFile Call
-    private LuaState m_Lua;
+    #region lua DoFile Call
+    /*private LuaState m_Lua;
 
     private void Awake()
     {
@@ -28,12 +29,12 @@ public class FirstLua : MonoBehaviour {
     {
         m_Lua.Dispose();
         m_Lua = null;
-    }
-    #endregion lua DoFile Call*/
+    }*/
+    #endregion lua DoFile Call
 
-    /*#region Call lua Function
+    #region Call lua Function
 
-    private string luaScript =
+    /*private string luaScript =
         @" function Fact(num)
                 if 0 == num then
                     return 1
@@ -101,8 +102,58 @@ public class FirstLua : MonoBehaviour {
         m_LuaFunction.EndPCall();
 
         return num;
-    }
-    #endregion Call lua Function*/
+    }*/
+    #endregion Call lua Function
+
+    #region Accessing lua Variable
+    /*private string luaScript =
+        @" print('Objs2Spawn is :'..Objs2Spawn)
+        var2read = 42
+        varTable = {1,2,3,4,5}
+        varTable.default = 1
+        varTable.map = {}
+        varTable.map.name = 'map'
+
+        meta = {name = 'meta'}
+        setmetatable(varTable, meta)
+
+        function TestFunc(strs)
+            print('get func by variable')
+        end
+        ";
+
+    private LuaState m_LuaState;
+
+    private void Awake()
+    {
+        DelegateFactory.Init();
+        m_LuaState = new LuaState();
+        m_LuaState.Start();
+        m_LuaState["Objs2Spawn"] = 5;
+        m_LuaState.DoString(luaScript);
+
+        Debug.Log(string.Format("Read var form lua : {0}", m_LuaState["var2read"]));
+        Debug.Log(string.Format("Read table from lua : {0}", m_LuaState["varTable.default"]));
+
+        LuaFunction func = m_LuaState["TestFunc"] as LuaFunction;
+        func.Call();
+        func.Dispose();
+
+        LuaTable table = m_LuaState.GetTable("varTable");
+        Debug.Log(string.Format("Read varTable from lua, default : {0} name : {1}", table["default"], table["name"]));
+
+        object[] array = table.ToArray();
+        for(int i = 0; i < array.Length; ++ i)
+        {
+            Debug.Log(string.Format(" Table Variable : {0}", array[i]));
+        }
+
+        table.Dispose();
+        m_LuaState.CheckTop();
+        m_LuaState.Dispose();
+        m_LuaState = null;
+    }*/
+    #endregion Accessing lua Variable
 
 
 }
