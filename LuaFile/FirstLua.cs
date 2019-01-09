@@ -1,4 +1,5 @@
-﻿using LuaInterface;
+﻿using System;
+using LuaInterface;
 using UnityEngine;
 
 public class FirstLua : MonoBehaviour {
@@ -155,5 +156,29 @@ public class FirstLua : MonoBehaviour {
     }*/
     #endregion Accessing lua Variable
 
+    #region lua Coroutine
+    private LuaState m_LuaState;
+    private LuaLooper m_LuaLooper;
 
+    private void Awake()
+    {
+        m_LuaState = new LuaState();
+        m_LuaState.Start();
+        LuaBinder(m_LuaState);
+        DelegateFactory.Init();
+        m_LuaLooper = gameObject.AddComponent<LuaLooper>();
+        m_LuaLooper.luaState = m_LuaState;
+
+        m_LuaState.DoFile();
+
+
+        m_LuaState.Dispose();
+        m_LuaState = null;
+    }
+
+    private void LuaBinder(LuaState m_LuaState)
+    {
+        throw new NotImplementedException();
+    }
+    #endregion lua Coroutine
 }
