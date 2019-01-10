@@ -343,7 +343,7 @@ public class FirstLua : MonoBehaviour {
     #endregion lua Accessing Array
 
     #region Dictionary
-    private  string luaScript =
+    /*private  string luaScript =
         @"
             function TestDict(map)
                 local ite = map:GetEnumerator()
@@ -443,10 +443,90 @@ public class FirstLua : MonoBehaviour {
         L.EndModule();
         L.EndModule();
         L.EndModule();
-        L.EndModule();*/
-    }
+        L.EndModule();
+    }*/
 
     #endregion Dictionary
+
+
+    #region Enum
+    /*private string luaString =
+        @"
+            space = nil
+
+            function TestEnum(e)
+                print('Enum is : '..tostring(e))
+
+                if space:ToInt() == 0 then
+                    print('Enum ToInt is ok')
+                end
+
+                if space:Equals(0) then
+                    print('Enum Compare is ok')
+                end
+            end
+
+            function LightToType(light,type)
+                light.type = type
+            end
+        ";
+
+    private LuaState m_LuaState;
+    private LuaFunction m_LuaFunction;
+
+    private void Awake()
+    {
+        m_LuaState = new LuaState();
+        m_LuaState.Start();
+        LuaBinder.Bind(m_LuaState);
+        new LuaResLoader();
+
+        m_LuaState.DoString(luaString);
+        m_LuaState["space"] = Space.World;
+        m_LuaFunction = m_LuaState.GetFunction("TestEnum");
+
+        m_LuaFunction.BeginPCall();
+        m_LuaFunction.Push(Space.World);
+        m_LuaFunction.PCall();
+        m_LuaFunction.EndPCall();
+
+    }
+
+    private int count;
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            Light light = GetComponent<Light>();
+            LuaFunction func = m_LuaState.GetFunction("LightToType");
+            func.BeginPCall();
+            func.Push(light);
+            func.Push((LightType)(count++%4));
+            func.PCall();
+            func.EndPCall();
+            func.Dispose();
+            func = null;
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        if(null != m_LuaState)
+        {
+            m_LuaState.Dispose();
+            m_LuaState = null; 
+        }
+
+        if(null != m_LuaFunction)
+        {
+            m_LuaFunction.Dispose();
+            m_LuaFunction = null; 
+        }
+    }*/
+    #endregion Enum
+
+    #region Delegate
+    #endregion Delegate
 }
 
 
