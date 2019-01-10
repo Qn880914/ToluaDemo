@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LuaInterface;
 using UnityEngine;
 
@@ -115,6 +116,12 @@ public class FirstLua : MonoBehaviour {
         varTable.map = {}
         varTable.map.name = 'map'
 
+        local a = {}
+        a[0] = 100
+
+        a["aaa"] = 100
+        print(a.aaa)
+
         meta = {name = 'meta'}
         setmetatable(varTable, meta)
 
@@ -157,28 +164,302 @@ public class FirstLua : MonoBehaviour {
     #endregion Accessing lua Variable
 
     #region lua Coroutine
-    private LuaState m_LuaState;
+    /*private LuaState m_LuaState;
     private LuaLooper m_LuaLooper;
+
+    [SerializeField]
+    private TextAsset m_TextAsset;
 
     private void Awake()
     {
         m_LuaState = new LuaState();
         m_LuaState.Start();
-        LuaBinder(m_LuaState);
+        LuaBinder.Bind(m_LuaState);
         DelegateFactory.Init();
         m_LuaLooper = gameObject.AddComponent<LuaLooper>();
         m_LuaLooper.luaState = m_LuaState;
 
-        m_LuaState.DoFile();
+        m_LuaState.DoString(m_TextAsset.text, "LuaCoroutine.lua");
+        LuaFunction func = m_LuaState.GetFunction("TestCortinue");
+        func.Call();
+        func.Dispose();
+        func = null;
+    }
 
+    private void OnApplicationQuit()
+    {
+        m_LuaLooper.Destroy();
+        m_LuaState.Dispose();
+        m_LuaState = null;
+    }*/
+    #endregion lua Coroutine
+
+    #region lua Thread
+    /*private string luaScript =
+        @"
+            function fib(n)
+                local a,b = 0,1
+                while n>0 do
+                    a,b = b, a+b
+                    n = n-1
+                end
+                return a;
+            end
+
+            function CoFunc(len)
+                print('Coroutine started')
+                local i = 0
+                for i = 0, len, 1 do
+                    local flag = coroutine.yield(fib(i))
+                    if not flag then
+                        break
+                    end
+                end
+                print('Coroutine ended')
+            end
+
+            function Test()
+                local co = coroutine.create(CoFunc)
+                return co
+            end
+        ";
+
+    private LuaState m_LuaState;
+    private LuaThread m_LuaThread;
+
+    private void Awake()
+    {
+        new LuaResLoader();
+        m_LuaState = new LuaState();
+        m_LuaState.Start();
+        m_LuaState.LogGC = true;
+        m_LuaState.DoString(luaScript);
+
+        LuaFunction func = m_LuaState.GetFunction("Test");
+        func.BeginPCall();
+        func.PCall();
+        m_LuaThread = func.CheckLuaThread();
+        func.EndPCall();
+        func.Dispose();
+        func = null;
+
+        m_LuaThread.Resume(10);
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            int result;
+            if(null != m_LuaThread && m_LuaThread.Resume(true, out result) == (int)LuaThreadStatus.LUA_YIELD)
+            {
+                Debug.Log(string.Format("___ Result : {0}", result));
+            }
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        m_LuaThread.Dispose();
+        m_LuaThread = null;
 
         m_LuaState.Dispose();
         m_LuaState = null;
+    }*/
+    #endregion
+
+    #region lua Accessing Array
+    /*private string luaString =
+        @"
+            function TestArray(array)
+                local length = array.Length
+                for i =0, length-1 do
+                    print('Array : '.. array[i])
+                end
+                
+                local ite = array:GetEnumerator()
+                while ite:MoveNext() do
+                    print('ite : '..ite.Current)
+                end
+
+                local t = array:ToTable()
+                for i=1, #t do
+                    print('table : '..tostring(t[i]))
+                end
+
+                local pos = array:BinarySearch(3)
+                print('Array BinarySearch : pos'..pos..'   value : '..array[pos])
+
+                pos = array:IndexOf(4)
+                print('array Indexof bbb pos is : '..pos)
+
+                return 1,'123',true
+            end
+        ";
+
+    private LuaState m_LuaState;
+    private LuaFunction m_LuaFunction;
+
+    private void Awake()
+    {
+        new LuaResLoader();
+        m_LuaState = new LuaState();
+        m_LuaState.Start();
+        m_LuaState.DoString(luaString, "FirstLua.cs");
+
+        int[] array = { 1,2,3,4,5};
+        m_LuaFunction = m_LuaState.GetFunction("TestArray");
+
+        m_LuaFunction.BeginPCall();
+        m_LuaFunction.Push(array);
+        m_LuaFunction.PCall();
+        double arg1 = m_LuaFunction.CheckNumber();
+        string arg2 = m_LuaFunction.CheckString();
+        bool arg3 = m_LuaFunction.CheckBoolean();
+        Debug.Log(string.Format("Arg1 : {0}   Arg2 : {1}  Arg3 : {2}", arg1, arg2, arg3));
+        m_LuaFunction.EndPCall();
+
+
+        object[] objs = m_LuaFunction.LazyCall((object)array);
+        Debug.Log(objs.ToString());
+
+        m_LuaState.CheckTop();
     }
 
-    private void LuaBinder(LuaState m_LuaState)
+    private void OnApplicationQuit()
     {
-        throw new NotImplementedException();
+        if(null != m_LuaState)
+        {
+            m_LuaState.Dispose();
+            m_LuaState = null;
+        }
+
+        if(null != m_LuaFunction)
+        {
+            m_LuaFunction.Dispose();
+            m_LuaFunction = null;
+        }
+    }*/
+    #endregion lua Accessing Array
+
+    #region Dictionary
+    private  string luaScript =
+        @"
+            function TestDict(map)
+                local ite = map:GetEnumerator()
+
+                while ite:MoveNext() do
+                    local v = ite.Current.Value
+                    print('id : '..v.id..'  name : '..v.name..'  sex : '..v.sex)
+                end
+
+                local flag,account = map:TryGetValue(1, nil)
+                if flag then
+                    print('TryGetValue result ok : '..account.name)
+                end
+
+
+                local keys = map.Keys
+                ite = keys:GetEnumerator()
+                print('-----------print dictionary keys-----------')
+                while ite:MoveNext() do
+                    print(ite.Current.name)
+                end
+                print('------------------over---------------------')
+
+
+
+                local values = map.Values
+                ite = values:GetEnumerator()
+                print('-----------print dictionary values----------')
+                while ite:MoveNext() do
+                    print(ite.Current.name)
+                end
+                print('------------------over----------------------')
+
+
+
+                print('kick'..map[2].name)
+                map:Remove(2)
+                ite = map:GetEnumerator()
+                while ite:MoveNext() do
+                    local v = ite.Current.Value
+                    print('id : '..v.id..'  name : '..v.name..'  sex : '..v.sex)
+                end
+            end
+        ";
+
+    private LuaState m_LuaState;
+    private Dictionary<int, PlayerAccount> m_DicPlayerAccount = new Dictionary<int, PlayerAccount>();
+
+    private void Awake()
+    {
+        m_DicPlayerAccount[1] = new PlayerAccount(1, "mingming", 0);
+        m_DicPlayerAccount[2] = new PlayerAccount(2, "qn", 1);
+        m_DicPlayerAccount[3] = new PlayerAccount(1, "xm", 0);
+
+        new LuaResLoader();
+        m_LuaState = new LuaState();
+        m_LuaState.Start();
+        BindMap(m_LuaState);
+
+        m_LuaState.DoString(luaScript, "FirstLua.cs");
+        LuaFunction func = m_LuaState.GetFunction("TestDict");
+        func.BeginPCall();
+        func.Push(m_DicPlayerAccount);
+        func.PCall();
+        func.EndPCall();
+
+        func.Dispose();
+        func = null;
+
+        m_LuaState.CheckTop();
     }
-    #endregion lua Coroutine
+
+    private void OnApplicationQuit()
+    {
+        if(null != m_LuaState)
+        {
+            m_LuaState.Dispose();
+            m_LuaState = null;
+        }
+    }
+
+    void BindMap(LuaState L)
+    {
+
+        LuaBinder.Bind(L);
+        /*L.BeginModule(null);
+        PlayerAccountWrap.Register(L);
+        L.BeginModule("System");
+        L.BeginModule("Collections");
+        L.BeginModule("Generic");
+        System_Collections_Generic_Dictionary_int_PlayerAccountWrap.Register(L);
+        System_Collections_Generic_KeyValuePair_int_PlayerAccountWrap.Register(L);
+        L.BeginModule("Dictionary");
+        System_Collections_Generic_Dictionary_int_PlayerAccount_KeyCollectionWrap.Register(L);
+        System_Collections_Generic_Dictionary_int_PlayerAccount_ValueCollectionWrap.Register(L);
+        L.EndModule();
+        L.EndModule();
+        L.EndModule();
+        L.EndModule();
+        L.EndModule();*/
+    }
+
+    #endregion Dictionary
+}
+
+
+public class PlayerAccount
+{
+    public int id;
+    public string name;
+    public int sex;
+
+    public PlayerAccount(int id, string name, int sex)
+    {
+        this.id = id;
+        this.name = name;
+        this.sex = sex;
+    }
 }

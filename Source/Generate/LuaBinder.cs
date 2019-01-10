@@ -11,6 +11,7 @@ public static class LuaBinder
 		L.BeginModule(null);
 		LuaInterface_DebuggerWrap.Register(L);
 		LuaProfilerWrap.Register(L);
+		PlayerAccountWrap.Register(L);
 		L.BeginModule("LuaInterface");
 		LuaInterface_LuaInjectionStationWrap.Register(L);
 		LuaInterface_InjectTypeWrap.Register(L);
@@ -80,6 +81,16 @@ public static class LuaBinder
 		L.RegFunction("Func_int_int", System_Func_int_int);
 		L.RegFunction("Func_bool", System_Func_bool);
 		L.RegFunction("Action_UnityEngine_AsyncOperation", System_Action_UnityEngine_AsyncOperation);
+		L.BeginModule("Collections");
+		L.BeginModule("Generic");
+		System_Collections_Generic_Dictionary_int_PlayerAccountWrap.Register(L);
+		System_Collections_Generic_KeyValuePair_int_PlayerAccountWrap.Register(L);
+		L.BeginModule("Dictionary<int,PlayerAccount>");
+		System_Collections_Generic_Dictionary_int_PlayerAccount_KeyCollectionWrap.Register(L);
+		System_Collections_Generic_Dictionary_int_PlayerAccount_ValueCollectionWrap.Register(L);
+		L.EndModule();
+		L.EndModule();
+		L.EndModule();
 		L.EndModule();
 		L.EndModule();
 		L.BeginPreLoad();
