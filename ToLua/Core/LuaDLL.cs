@@ -1140,7 +1140,7 @@ namespace LuaInterface
 
         public static int toluaL_exception(IntPtr L, Exception e)
         {            
-            LuaException.luaStack = new LuaException(e.Message, e, 2);            
+            LuaException.exception = new LuaException(e.Message, e, 2);            
             return tolua_error(L, e.Message);
         }
 
@@ -1151,7 +1151,7 @@ namespace LuaInterface
                 msg = e.Message;
             }
             
-            LuaException.luaStack = new LuaException(msg, e, 2);
+            LuaException.exception = new LuaException(msg, e, 2);
             return tolua_error(L, msg);
         }
 

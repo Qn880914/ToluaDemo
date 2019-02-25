@@ -30,21 +30,22 @@ namespace LuaInterface
 {
     public class LuaException : Exception
     {
-        public static Exception luaStack = null;
-        public static string projectFolder = null;
-        public static int InstantiateCount = 0;
-        public static int SendMsgCount = 0;
+        public static Exception exception;
+        public static string projectFolder;
+        public static int instantiateCount;
+        public static int sendMsgCount;
         public static IntPtr L = IntPtr.Zero;
+
+        protected string m_StackTrace = string.Empty;
 
         public override string StackTrace
         {
             get
             {
-                return _stack;
+                return m_StackTrace;
             }
         }
-
-        protected string _stack = string.Empty;        
+        
 
         public LuaException(string msg, Exception e = null, int skip = 1)
             : base(msg)
@@ -53,7 +54,7 @@ namespace LuaInterface
             {
                 if (e is LuaException)
                 {
-                    _stack = e.StackTrace;
+                    m_StackTrace = e.StackTrace;
                 }
                 else
                 {                                        
@@ -62,7 +63,7 @@ namespace LuaInterface
                     ExtractFormattedStackTrace(trace, sb);                    
                     StackTrace self = new StackTrace(skip, true);
                     ExtractFormattedStackTrace(self, sb, trace);
-                    _stack = sb.ToString();                    
+                    m_StackTrace = sb.ToString();                    
                 }
             }
             else
@@ -70,14 +71,14 @@ namespace LuaInterface
                 StackTrace self = new StackTrace(skip, true);
                 StringBuilder sb = new StringBuilder();
                 ExtractFormattedStackTrace(self, sb);
-                _stack = sb.ToString();
+                m_StackTrace = sb.ToString();
             }                        
         }
 
         public static Exception GetLastError()
         {
-            Exception last = luaStack;
-            luaStack = null;
+            Exception last = exception;
+            exception = null;
             return last;
         }
 
@@ -117,8 +118,8 @@ namespace LuaInterface
                 Type declaringType = method.DeclaringType;
                 string str = declaringType.Namespace;
 
-                if ( (InstantiateCount == 0 && declaringType == typeof(UnityEngine.Object) &&  method.Name == "Instantiate") //(method.Name == "Internal_CloneSingle"
-                    || (SendMsgCount == 0 && declaringType == typeof(GameObject) && method.Name == "SendMessage"))
+                if ( (instantiateCount == 0 && declaringType == typeof(UnityEngine.Object) &&  method.Name == "Instantiate") //(method.Name == "Internal_CloneSingle"
+                    || (sendMsgCount == 0 && declaringType == typeof(GameObject) && method.Name == "SendMessage"))
                 {
                     break;
                 }

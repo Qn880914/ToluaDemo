@@ -395,7 +395,7 @@ public class UnityEngine_GameObjectWrap
 
         try
         {
-            ++LuaException.InstantiateCount;
+            ++LuaException.instantiateCount;
             LuaException.L = L;
             ToLua.CheckArgsCount(L, 2);
 			UnityEngine.GameObject obj = (UnityEngine.GameObject)ToLua.CheckObject(L, 1, typeof(UnityEngine.GameObject));
@@ -411,13 +411,13 @@ public class UnityEngine_GameObjectWrap
 
             ToLua.Push(L, o);
             LuaException.L = L0;
-            --LuaException.InstantiateCount;
+            --LuaException.instantiateCount;
             return 1;
 		}
 		catch (Exception e)
 		{
             LuaException.L = L0;
-            --LuaException.InstantiateCount;
+            --LuaException.instantiateCount;
             return LuaDLL.toluaL_exception(L, e);
 		}
 	}
@@ -429,7 +429,7 @@ public class UnityEngine_GameObjectWrap
     
 		try
 		{
-            ++LuaException.SendMsgCount;
+            ++LuaException.sendMsgCount;
             LuaException.L = L;
             int count = LuaDLL.lua_gettop(L);
 
@@ -446,7 +446,7 @@ public class UnityEngine_GameObjectWrap
                     throw new LuaException(error, LuaException.GetLastError());
                 }
 
-				--LuaException.SendMsgCount;
+				--LuaException.sendMsgCount;
                 LuaException.L = L0;
                 return 0;
 			}
@@ -464,7 +464,7 @@ public class UnityEngine_GameObjectWrap
                     throw new LuaException(error, LuaException.GetLastError());
                 }
 
-				--LuaException.SendMsgCount;
+				--LuaException.sendMsgCount;
                 LuaException.L = L0;
                 return 0;
 			}
@@ -482,7 +482,7 @@ public class UnityEngine_GameObjectWrap
                     throw new LuaException(error, LuaException.GetLastError());
                 }
 
-				--LuaException.SendMsgCount;
+				--LuaException.sendMsgCount;
                 LuaException.L = L0;
                 return 0;
 			}
@@ -501,20 +501,20 @@ public class UnityEngine_GameObjectWrap
                     throw new LuaException(error, LuaException.GetLastError());
                 }
 
-				--LuaException.SendMsgCount;
+				--LuaException.sendMsgCount;
                 LuaException.L = L0;
                 return 0;
 			}
 			else
 			{
-                --LuaException.SendMsgCount;
+                --LuaException.sendMsgCount;
                 LuaException.L = L0;
                 return LuaDLL.luaL_throw(L, "invalid arguments to method: UnityEngine.GameObject.BroadcastMessage");
 			}
 		}
 		catch (Exception e)
 		{
-			--LuaException.SendMsgCount;
+			--LuaException.sendMsgCount;
 			LuaException.L = L0;
 			return LuaDLL.toluaL_exception(L, e);
 		}
@@ -527,7 +527,7 @@ public class UnityEngine_GameObjectWrap
 
 		try
 		{
-            ++LuaException.SendMsgCount;
+            ++LuaException.sendMsgCount;
             LuaException.L = L;
             int count = LuaDLL.lua_gettop(L);
 
@@ -544,7 +544,7 @@ public class UnityEngine_GameObjectWrap
                     throw new LuaException(error, LuaException.GetLastError());
                 }
 
-				--LuaException.SendMsgCount;
+				--LuaException.sendMsgCount;
                 LuaException.L = L0;
                 return 0;
 			}
@@ -562,7 +562,7 @@ public class UnityEngine_GameObjectWrap
                     throw new LuaException(error, LuaException.GetLastError());
                 }
 
-				--LuaException.SendMsgCount;
+				--LuaException.sendMsgCount;
                 LuaException.L = L0;
                 return 0;
 			}
@@ -580,7 +580,7 @@ public class UnityEngine_GameObjectWrap
                     throw new LuaException(error, LuaException.GetLastError());
                 }
 
-				--LuaException.SendMsgCount;
+				--LuaException.sendMsgCount;
                 LuaException.L = L0;
                 return 0;
 			}
@@ -599,20 +599,20 @@ public class UnityEngine_GameObjectWrap
                     throw new LuaException(error, LuaException.GetLastError());
                 }
 
-				--LuaException.SendMsgCount;
+				--LuaException.sendMsgCount;
                 LuaException.L = L0;
                 return 0;
 			}
 			else
 			{
-				--LuaException.SendMsgCount;
+				--LuaException.sendMsgCount;
                 LuaException.L = L0;                
                 return LuaDLL.luaL_throw(L, "invalid arguments to method: UnityEngine.GameObject.SendMessageUpwards");
 			}
 		}
 		catch (Exception e)
 		{
-			--LuaException.SendMsgCount;
+			--LuaException.sendMsgCount;
 			LuaException.L = L0;
 			return LuaDLL.toluaL_exception(L, e);
 		}
@@ -625,7 +625,7 @@ public class UnityEngine_GameObjectWrap
 
 		try
 		{
-            ++LuaException.SendMsgCount;
+            ++LuaException.sendMsgCount;
             LuaException.L = L;
 			int count = LuaDLL.lua_gettop(L);
 
@@ -642,7 +642,7 @@ public class UnityEngine_GameObjectWrap
                     throw new LuaException(error, LuaException.GetLastError());
                 }
                 
-				--LuaException.SendMsgCount;
+				--LuaException.sendMsgCount;
                 LuaException.L = L0;
 				return 0;
 			}
@@ -660,7 +660,7 @@ public class UnityEngine_GameObjectWrap
                     throw new LuaException(error, LuaException.GetLastError());
                 }
 
-				--LuaException.SendMsgCount;
+				--LuaException.sendMsgCount;
                 LuaException.L = L0;
 				return 0;
 			}
@@ -678,7 +678,7 @@ public class UnityEngine_GameObjectWrap
                     throw new LuaException(error, LuaException.GetLastError());
                 }
 
-				--LuaException.SendMsgCount;
+				--LuaException.sendMsgCount;
                 LuaException.L = L0;
 				return 0;
 			}
@@ -697,20 +697,20 @@ public class UnityEngine_GameObjectWrap
                     throw new LuaException(error, LuaException.GetLastError());
                 }
 
-				--LuaException.SendMsgCount;
+				--LuaException.sendMsgCount;
                 LuaException.L = L0;
 				return 0;
 			}
 			else
 			{
-                --LuaException.SendMsgCount;      
+                --LuaException.sendMsgCount;      
                 LuaException.L = L0;                          
                 return LuaDLL.luaL_throw(L, "invalid arguments to method: UnityEngine.GameObject.SendMessage");     
 			}
 		}
 		catch(Exception e)
 		{
-			--LuaException.SendMsgCount;
+			--LuaException.sendMsgCount;
 			LuaException.L = L0;
 			return LuaDLL.toluaL_exception(L, e);
 		}

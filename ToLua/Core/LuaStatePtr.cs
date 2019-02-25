@@ -591,7 +591,7 @@ namespace LuaInterface
         //适合Awake OnSendMsg使用
         public void ThrowLuaException(Exception e)
         {
-            if (LuaException.InstantiateCount > 0 || LuaException.SendMsgCount > 0)
+            if (LuaException.instantiateCount > 0 || LuaException.sendMsgCount > 0)
             {
                 LuaDLL.toluaL_exception(LuaException.L, e);
             }

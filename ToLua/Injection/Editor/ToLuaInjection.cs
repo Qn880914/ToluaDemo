@@ -174,7 +174,7 @@ public static class ToLuaInjection
                     foreach (var type in module.Types)
                     {
                         ++cursor;
-                        EditorUtility.DisplayProgressBar("Injecting:" + module.FullyQualifiedName, type.FullName, (float)cursor / typesCount);
+                        EditorUtility.DisplayProgressBar("Injecting:" + module.FileName, type.FullName, (float)cursor / typesCount);
                         if (!InjectProcess(assembly, type))
                         {
                             EditorUtility.ClearProgressBar();

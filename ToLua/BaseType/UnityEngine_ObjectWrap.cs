@@ -193,7 +193,7 @@ public class UnityEngine_ObjectWrap
 
         try
         {
-            ++LuaException.InstantiateCount;            
+            ++LuaException.instantiateCount;            
             LuaException.L = L;
             int count = LuaDLL.lua_gettop(L);
 
@@ -214,7 +214,7 @@ public class UnityEngine_ObjectWrap
                 }
 
                 LuaException.L = L0;
-                --LuaException.InstantiateCount;
+                --LuaException.instantiateCount;
                 return 1;
             }
 #if UNITY_5_4_OR_NEWER
@@ -236,7 +236,7 @@ public class UnityEngine_ObjectWrap
                 }
 
                 LuaException.L = L0;
-                --LuaException.InstantiateCount;
+                --LuaException.instantiateCount;
                 return 1;
             }
 #endif
@@ -259,7 +259,7 @@ public class UnityEngine_ObjectWrap
                 }
 
                 LuaException.L = L0;
-                --LuaException.InstantiateCount;
+                --LuaException.instantiateCount;
                 return 1;
             }
 #if UNITY_5_4_OR_NEWER
@@ -282,7 +282,7 @@ public class UnityEngine_ObjectWrap
                 }
 
                 LuaException.L = L0;
-                --LuaException.InstantiateCount;
+                --LuaException.instantiateCount;
                 return 1;
             }
             else if (count == 4)
@@ -305,21 +305,21 @@ public class UnityEngine_ObjectWrap
                 }
 
                 LuaException.L = L0;
-                --LuaException.InstantiateCount;
+                --LuaException.instantiateCount;
                 return 1;
             }
 #endif
             else
             {
                 LuaException.L = L0;
-                --LuaException.InstantiateCount;
+                --LuaException.instantiateCount;
                 return LuaDLL.luaL_throw(L, "invalid arguments to method: UnityEngine.Object.Instantiate");
             }
         }
         catch (Exception e)
         {
             LuaException.L = L0;
-            --LuaException.InstantiateCount;
+            --LuaException.instantiateCount;
             return LuaDLL.toluaL_exception(L, e);
         }
 	}

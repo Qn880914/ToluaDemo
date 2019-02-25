@@ -22,71 +22,70 @@ SOFTWARE.
 
 using System;
 using System.Runtime.CompilerServices;
-using UnityEngine;
 
 namespace LuaInterface
 {
     public abstract class LuaBaseRef : IDisposable
     {
-        public string name = null;
-        protected int reference = -1;
-        protected LuaState luaState;
-        protected ObjectTranslator translator = null;
+        protected int m_Reference = -1;
+        protected LuaState m_LuaState;
+        protected ObjectTranslator m_Translator = null;
 
-        protected volatile bool beDisposed;
-        protected int count = 0;
+        protected volatile bool m_IsDisposed;
+        protected int m_Count = 0;
+
+        public volatile bool alive = true;
+        public string name { get; set; }
 
         public LuaBaseRef()
         {
-            IsAlive = true;
-            count = 1;
+            alive = true;
+            m_Count = 1;
         }
 
         ~LuaBaseRef()
         {
-            IsAlive = false;
+            alive = false;
             Dispose(false);
         }
 
         public virtual void Dispose()
         {
-            --count;
-
-            if (count > 0)
+            if (--m_Count > 0)
             {
                 return;
             }
 
-            IsAlive = false;
-            Dispose(true);            
+            alive = false;
+            Dispose(true);
         }
 
         public void AddRef()
         {
-            ++count;            
+            ++m_Count;
         }
 
         public virtual void Dispose(bool disposeManagedResources)
         {
-            if (!beDisposed)
+            if (!m_IsDisposed)
             {
-                beDisposed = true;   
+                m_IsDisposed = true;
 
-                if (reference > 0 && luaState != null)
+                if (m_Reference > 0 && m_LuaState != null)
                 {
-                    luaState.CollectRef(reference, name, !disposeManagedResources);
+                    m_LuaState.CollectRef(m_Reference, name, !disposeManagedResources);
                 }
-                
-                reference = -1;
-                luaState = null;
-                count = 0;
-            }            
+
+                m_Reference = -1;
+                m_LuaState = null;
+                m_Count = 0;
+            }
         }
 
         //慎用
         public void Dispose(int generation)
-        {                         
-            if (count > generation)
+        {
+            if (m_Count > generation)
             {
                 return;
             }
@@ -96,35 +95,35 @@ namespace LuaInterface
 
         public LuaState GetLuaState()
         {
-            return luaState;
+            return m_LuaState;
         }
 
         public void Push()
         {
-            luaState.Push(this);
+            m_LuaState.Push(this);
         }
 
         public override int GetHashCode()
         {
-            return RuntimeHelpers.GetHashCode(this);            
+            return RuntimeHelpers.GetHashCode(this);
         }
 
         public virtual int GetReference()
         {
-            return reference;
+            return m_Reference;
         }
 
         public override bool Equals(object o)
         {
-            if (o == null) return reference <= 0;
-            LuaBaseRef lr = o as LuaBaseRef;      
-            
-            if (lr == null || lr.reference != reference)
+            if (o == null) return m_Reference <= 0;
+
+            LuaBaseRef lr = o as LuaBaseRef;
+            if (lr == null || lr.m_Reference != m_Reference)
             {
                 return false;
             }
 
-            return reference > 0;
+            return m_Reference > 0;
         }
 
         static bool CompareRef(LuaBaseRef a, LuaBaseRef b)
@@ -139,32 +138,30 @@ namespace LuaInterface
 
             if (l == null && r != null)
             {
-                return b.reference <= 0;
+                return b.m_Reference <= 0;
             }
 
             if (l != null && r == null)
             {
-                return a.reference <= 0;
+                return a.m_Reference <= 0;
             }
 
-            if (a.reference != b.reference)
+            if (a.m_Reference != b.m_Reference)
             {
                 return false;
             }
 
-            return a.reference > 0;
+            return a.m_Reference > 0;
         }
 
-        public static bool operator == (LuaBaseRef a, LuaBaseRef b)
+        public static bool operator ==(LuaBaseRef a, LuaBaseRef b)
         {
             return CompareRef(a, b);
         }
 
-        public static bool operator != (LuaBaseRef a, LuaBaseRef b)
+        public static bool operator !=(LuaBaseRef a, LuaBaseRef b)
         {
             return !CompareRef(a, b);
         }
-
-        public volatile bool IsAlive = true;
     }
 }

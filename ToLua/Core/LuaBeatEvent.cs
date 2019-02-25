@@ -26,30 +26,30 @@ namespace LuaInterface
 {    
     public class LuaBeatEvent : IDisposable
     {
-        protected LuaState luaState;
-        protected bool beDisposed;
+        protected LuaState m_LuaState;
+        protected bool m_IsDisposed;
 
-        LuaTable self = null;
-        LuaFunction _add = null;
-        LuaFunction _remove = null;
+        LuaTable m_LuaTable = null;
+        LuaFunction m_FunAdd = null;
+        LuaFunction m_FunRemove = null;
         //LuaFunction _call = null;
 
         public LuaBeatEvent(LuaTable table)            
         {
-            self = table;
-            luaState = table.GetLuaState();
-            self.AddRef();
-            
-            _add = self.GetLuaFunction("Add");
-            _remove = self.GetLuaFunction("Remove");
+            m_LuaTable = table;
+            m_LuaState = table.GetLuaState();
+            m_LuaTable.AddRef();
+
+            m_FunAdd = m_LuaTable.GetLuaFunction("Add");
+            m_FunRemove = m_LuaTable.GetLuaFunction("Remove");
             //_call = self.GetLuaFunction("__call");            
         }
 
         public void Dispose()
         {
-            self.Dispose();            
-            _add.Dispose();
-            _remove.Dispose();
+            m_LuaTable.Dispose();
+            m_FunAdd.Dispose();
+            m_FunRemove.Dispose();
             //_call.Dispose();
             Clear();
         }
@@ -57,17 +57,17 @@ namespace LuaInterface
         void Clear()
         {
             //_call = null;
-            _add = null;
-            _remove = null;
-            self = null;            
-            luaState = null;
+            m_FunAdd = null;
+            m_FunRemove = null;
+            m_LuaTable = null;
+            m_LuaState = null;
         }
 
         public void Dispose(bool disposeManagedResources)
         {
-            if (!beDisposed)
+            if (!m_IsDisposed)
             {
-                beDisposed = true;
+                m_IsDisposed = true;
 
                 //if (_call != null)
                 //{
@@ -75,21 +75,21 @@ namespace LuaInterface
                 //    _call = null;
                 //}
 
-                if (_add != null)
+                if (m_FunAdd != null)
                 {
-                    _add.Dispose(disposeManagedResources);
-                    _add = null;
+                    m_FunAdd.Dispose(disposeManagedResources);
+                    m_FunAdd = null;
                 }
 
-                if (_remove != null)
+                if (m_FunRemove != null)
                 {
-                    _remove.Dispose(disposeManagedResources);
-                    _remove = null;
+                    m_FunRemove.Dispose(disposeManagedResources);
+                    m_FunRemove = null;
                 }
 
-                if (self != null)
+                if (m_LuaTable != null)
                 {
-                    self.Dispose(disposeManagedResources);
+                    m_LuaTable.Dispose(disposeManagedResources);
                 }
 
                 Clear();
@@ -103,12 +103,12 @@ namespace LuaInterface
                 return;
             }
 
-            _add.BeginPCall();
-            _add.Push(self);
-            _add.Push(func);
-            _add.Push(obj);
-            _add.PCall();
-            _add.EndPCall();
+            m_FunAdd.BeginPCall();
+            m_FunAdd.Push(m_LuaTable);
+            m_FunAdd.Push(func);
+            m_FunAdd.Push(obj);
+            m_FunAdd.PCall();
+            m_FunAdd.EndPCall();
         }
 
         public void Remove(LuaFunction func, LuaTable obj)
@@ -118,12 +118,12 @@ namespace LuaInterface
                 return;
             }
 
-            _remove.BeginPCall();
-            _remove.Push(self);
-            _remove.Push(func);
-            _remove.Push(obj);
-            _remove.PCall();
-            _remove.EndPCall();
+            m_FunRemove.BeginPCall();
+            m_FunRemove.Push(m_LuaTable);
+            m_FunRemove.Push(func);
+            m_FunRemove.Push(obj);
+            m_FunRemove.PCall();
+            m_FunRemove.EndPCall();
         }
 
         //public override int GetReference()

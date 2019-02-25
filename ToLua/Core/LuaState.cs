@@ -823,7 +823,7 @@ namespace LuaInterface
                         LuaFunction func = weak.Target as LuaFunction;
                         CheckNull(func, "{0} not a lua function", fullPath);
 
-                        if (func.IsAlive)
+                        if (func.alive)
                         {
                             func.AddRef();
                             return true;
@@ -901,7 +901,7 @@ namespace LuaInterface
                     LuaFunction func = weak.Target as LuaFunction;
                     CheckNull(func, "{0} not a lua function", name);
 
-                    if (func.IsAlive)
+                    if (func.alive)
                     {
                         func.AddRef();
                         RemoveFromGCList(func.GetReference());
@@ -923,7 +923,7 @@ namespace LuaInterface
                         LuaFunction func = weak.Target as LuaFunction;
                         CheckNull(func, "{0} not a lua function", name);
 
-                        if (func.IsAlive)
+                        if (func.alive)
                         {
                             funcMap.Add(name, weak);
                             func.AddRef();
@@ -963,7 +963,7 @@ namespace LuaInterface
                 {
                     LuaBaseRef luaRef = (LuaBaseRef)weak.Target;
 
-                    if (luaRef.IsAlive)
+                    if (luaRef.alive)
                     {
                         luaRef.AddRef();
                         return luaRef;
@@ -1002,7 +1002,7 @@ namespace LuaInterface
                     LuaTable table = weak.Target as LuaTable;
                     CheckNull(table, "{0} not a lua table", fullPath);
 
-                    if (table.IsAlive)
+                    if (table.alive)
                     {
                         table.AddRef();
                         RemoveFromGCList(table.GetReference());
@@ -1025,7 +1025,7 @@ namespace LuaInterface
                         table = weak.Target as LuaTable;
                         CheckNull(table, "{0} not a lua table", fullPath);
 
-                        if (table.IsAlive)
+                        if (table.alive)
                         {
                             funcMap.Add(fullPath, weak);
                             table.AddRef();

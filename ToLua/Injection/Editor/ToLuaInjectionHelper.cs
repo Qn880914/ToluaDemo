@@ -117,7 +117,7 @@ public static class ToLuaInjectionHelper
             {
                 if (baseType.IsGenericInstance)
                 {
-                    MethodReference baseMethodRef = baseTypeDef.Module.Import(baseMethodDef);
+                    MethodReference baseMethodRef = baseTypeDef.Module.ImportReference(baseMethodDef);
                     var baseTypeInstance = (GenericInstanceType)baseType;
                     return baseMethodRef.MakeGenericMethod(baseTypeInstance.GenericArguments.ToArray());
                 }
