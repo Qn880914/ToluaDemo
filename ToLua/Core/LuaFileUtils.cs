@@ -20,52 +20,60 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
-using System.Collections;
-using System.Text;
+using UnityEngine;
 
 namespace LuaInterface
 {
     public class LuaFileUtils
     {
-        public static LuaFileUtils Instance
+        private static readonly object lock_helper = new object();
+
+        protected static LuaFileUtils s_Instance = null;
+        public static LuaFileUtils instance
         {
             get
             {
-                if (instance == null)
+                if (s_Instance == null)
                 {
-                    instance = new LuaFileUtils();
+                    lock (lock_helper)
+                    {
+                        if (s_Instance == null)
+                        {
+                            s_Instance = new LuaFileUtils();
+                        }
+                    }
                 }
 
-                return instance;
+                return s_Instance;
             }
 
             protected set
             {
-                instance = value;
+                s_Instance = value;
             }
         }
 
         //beZip = false 在search path 中查找读取lua文件。否则从外部设置过来bundel文件中读取lua文件
-        public bool beZip = false;
-        protected List<string> searchPaths = new List<string>();
+        private bool m_IsZip = false;
+        public bool isZip { get { return m_IsZip; } set { m_IsZip = value; } }
+
+        protected List<string> m_SearchPaths = new List<string>();
         protected Dictionary<string, AssetBundle> zipMap = new Dictionary<string, AssetBundle>();
 
-        protected static LuaFileUtils instance = null;
 
         public LuaFileUtils()
         {
-            instance = this;
+            s_Instance = this;
         }
 
         public virtual void Dispose()
         {
-            if (instance != null)
+            if (s_Instance != null)
             {
-                instance = null;
-                searchPaths.Clear();
+                s_Instance = null;
+                m_SearchPaths.Clear();
 
                 foreach (KeyValuePair<string, AssetBundle> iter in zipMap)
                 {
@@ -79,7 +87,7 @@ namespace LuaInterface
         //格式: 路径/?.lua
         public bool AddSearchPath(string path, bool front = false)
         {
-            int index = searchPaths.IndexOf(path);
+            int index = m_SearchPaths.IndexOf(path);
 
             if (index >= 0)
             {
@@ -88,11 +96,11 @@ namespace LuaInterface
 
             if (front)
             {
-                searchPaths.Insert(0, path);
+                m_SearchPaths.Insert(0, path);
             }
             else
             {
-                searchPaths.Add(path);
+                m_SearchPaths.Add(path);
             }
 
             return true;
@@ -100,11 +108,11 @@ namespace LuaInterface
 
         public bool RemoveSearchPath(string path)
         {
-            int index = searchPaths.IndexOf(path);
+            int index = m_SearchPaths.IndexOf(path);
 
             if (index >= 0)
             {
-                searchPaths.RemoveAt(index);
+                m_SearchPaths.RemoveAt(index);
                 return true;
             }
 
@@ -140,9 +148,9 @@ namespace LuaInterface
 
             string fullPath = null;
 
-            for (int i = 0; i < searchPaths.Count; i++)
+            for (int i = 0; i < m_SearchPaths.Count; i++)
             {
-                fullPath = searchPaths[i].Replace("?", fileName);
+                fullPath = m_SearchPaths[i].Replace("?", fileName);
 
                 if (File.Exists(fullPath))
                 {
@@ -155,7 +163,7 @@ namespace LuaInterface
 
         public virtual byte[] ReadFile(string fileName)
         {
-            if (!beZip)
+            if (!m_IsZip)
             {
                 string path = FindFile(fileName);
                 byte[] str = null;
@@ -193,14 +201,14 @@ namespace LuaInterface
             {
                 CString sb = CString.Alloc(512);
 
-                for (int i = 0; i < searchPaths.Count; i++)
+                for (int i = 0; i < m_SearchPaths.Count; i++)
                 {
-                    sb.Append("\n\tno file '").Append(searchPaths[i]).Append('\'');
+                    sb.Append("\n\tno file '").Append(m_SearchPaths[i]).Append('\'');
                 }
 
                 sb = sb.Replace("?", fileName);
 
-                if (beZip)
+                if (m_IsZip)
                 {
                     int pos = fileName.LastIndexOf('/');
 

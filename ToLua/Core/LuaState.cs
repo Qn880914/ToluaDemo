@@ -180,7 +180,7 @@ namespace LuaInterface
         {
             InitPackagePath();
 
-            if (!LuaFileUtils.Instance.beZip)
+            if (!LuaFileUtils.instance.isZip)
             {
 #if UNITY_EDITOR
                 if (!Directory.Exists(LuaConst.luaDir))
@@ -198,7 +198,7 @@ namespace LuaInterface
                 AddSearchPath(LuaConst.toluaDir);
                 AddSearchPath(LuaConst.luaDir);
 #endif
-                if (LuaFileUtils.Instance.GetType() == typeof(LuaFileUtils))
+                if (LuaFileUtils.instance.GetType() == typeof(LuaFileUtils))
                 {
                     AddSearchPath(LuaConst.luaResDir);
                 }
@@ -613,12 +613,12 @@ namespace LuaInterface
                 throw new LuaException("you must call Start() first to initialize LuaState");
             }
 #endif
-            byte[] buffer = LuaFileUtils.Instance.ReadFile(fileName);
+            byte[] buffer = LuaFileUtils.instance.ReadFile(fileName);
 
             if (buffer == null)
             {
                 string error = string.Format("cannot open {0}: No such file or directory", fileName);
-                error += LuaFileUtils.Instance.FindFileError(fileName);
+                error += LuaFileUtils.instance.FindFileError(fileName);
                 throw new LuaException(error);
             }
 
@@ -629,7 +629,7 @@ namespace LuaInterface
         {
             if (LuaConst.openLuaDebugger)
             {
-                name = LuaFileUtils.Instance.FindFile(name);
+                name = LuaFileUtils.instance.FindFile(name);
             }
 
             return "@" + name;
@@ -694,7 +694,7 @@ namespace LuaInterface
                 if (!string.IsNullOrEmpty(paths[i]))
                 {
                     string path = paths[i].Replace('\\', '/');
-                    LuaFileUtils.Instance.AddSearchPath(path);
+                    LuaFileUtils.instance.AddSearchPath(path);
                 }
             }
 
@@ -729,7 +729,7 @@ namespace LuaInterface
             }
 
             fullPath = ToPackagePath(fullPath);
-            LuaFileUtils.Instance.AddSearchPath(fullPath);        
+            LuaFileUtils.instance.AddSearchPath(fullPath);        
         }
 
         public void RemoveSeachPath(string fullPath)
@@ -740,7 +740,7 @@ namespace LuaInterface
             }
 
             fullPath = ToPackagePath(fullPath);
-            LuaFileUtils.Instance.RemoveSearchPath(fullPath);
+            LuaFileUtils.instance.RemoveSearchPath(fullPath);
         }        
 
         public int BeginPCall(int reference)
@@ -2031,7 +2031,7 @@ namespace LuaInterface
             beStart = false;
 #endif
 
-            LuaFileUtils.Instance.Dispose();
+            LuaFileUtils.instance.Dispose();
             System.GC.SuppressFinalize(this);            
         }
 

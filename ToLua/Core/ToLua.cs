@@ -212,18 +212,18 @@ namespace LuaInterface
             {
                 string fileName = LuaDLL.lua_tostring(L, 1);
                 fileName = fileName.Replace(".", "/");
-                byte[] buffer = LuaFileUtils.Instance.ReadFile(fileName);
+                byte[] buffer = LuaFileUtils.instance.ReadFile(fileName);
 
                 if (buffer == null)
                 {
-                    string error = LuaFileUtils.Instance.FindFileError(fileName);
+                    string error = LuaFileUtils.instance.FindFileError(fileName);
                     LuaDLL.lua_pushstring(L, error);
                     return 1;
                 }
 
                 if (LuaConst.openLuaDebugger)
                 {
-                    fileName = LuaFileUtils.Instance.FindFile(fileName);
+                    fileName = LuaFileUtils.instance.FindFile(fileName);
                 }                
 
                 if (LuaDLL.luaL_loadbuffer(L, buffer, buffer.Length, "@"+ fileName) != 0)
@@ -247,12 +247,12 @@ namespace LuaInterface
             {
                 string fileName = LuaDLL.lua_tostring(L, 1);
                 int n = LuaDLL.lua_gettop(L);
-                byte[] buffer = LuaFileUtils.Instance.ReadFile(fileName);
+                byte[] buffer = LuaFileUtils.instance.ReadFile(fileName);
 
                 if (buffer == null)
                 {
                     string error = string.Format("cannot open {0}: No such file or directory", fileName);
-                    error += LuaFileUtils.Instance.FindFileError(fileName);
+                    error += LuaFileUtils.instance.FindFileError(fileName);
                     throw new LuaException(error);
                 }
 
@@ -279,12 +279,12 @@ namespace LuaInterface
             try
             {
                 string fileName = LuaDLL.lua_tostring(L, 1);
-                byte[] buffer = LuaFileUtils.Instance.ReadFile(fileName);
+                byte[] buffer = LuaFileUtils.instance.ReadFile(fileName);
 
                 if (buffer == null)
                 {
                     string error = string.Format("cannot open {0}: No such file or directory", fileName);
-                    error += LuaFileUtils.Instance.FindFileError(fileName);
+                    error += LuaFileUtils.instance.FindFileError(fileName);
                     throw new LuaException(error);
                 }
 

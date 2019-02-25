@@ -31,7 +31,7 @@ public class LuaResLoader : LuaFileUtils
     public LuaResLoader()
     {
         instance = this;
-        beZip = false;
+        isZip = false;
     }
 
     public override byte[] ReadFile(string fileName)
@@ -81,9 +81,9 @@ public class LuaResLoader : LuaFileUtils
         {
             CString sb = CString.Alloc(512);
 
-            for (int i = 0; i < searchPaths.Count; i++)
+            for (int i = 0; i < m_SearchPaths.Count; i++)
             {
-                sb.Append("\n\tno file '").Append(searchPaths[i]).Append('\'');
+                sb.Append("\n\tno file '").Append(m_SearchPaths[i]).Append('\'');
             }
 
             sb.Append("\n\tno file './Resources/").Append(fileName).Append(".lua'")

@@ -30,7 +30,7 @@ public class TestABLoader : MonoBehaviour
             }
 
             --bundleCount;
-            LuaFileUtils.Instance.AddSearchBundle(name, www.assetBundle);
+            LuaFileUtils.instance.AddSearchBundle(name, www.assetBundle);
             www.Dispose();
         }                     
     }
@@ -90,7 +90,7 @@ public class TestABLoader : MonoBehaviour
         Application.RegisterLogCallback(ShowTips);
 #endif
         LuaFileUtils file = new LuaFileUtils();
-        file.beZip = true;
+        file.isZip = true;
 #if UNITY_ANDROID && UNITY_EDITOR
         if (IntPtr.Size == 8)
         {

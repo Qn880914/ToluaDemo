@@ -46,7 +46,7 @@ public class LuaClient : MonoBehaviour
 
     protected virtual LuaFileUtils InitLoader()
     {
-        return LuaFileUtils.Instance;       
+        return LuaFileUtils.instance;       
     }
 
     protected virtual void LoadLuaFiles()
