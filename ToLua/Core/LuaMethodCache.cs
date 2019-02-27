@@ -20,24 +20,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 using System;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace LuaInterface
 {
     public static class LuaMethodCache
     {
-        public static Dictionary<Type, Dictionary<string, List<MethodInfo>>> dict = new Dictionary<Type, Dictionary<string, List<MethodInfo>>>();
+        private static Dictionary<Type, Dictionary<string, List<MethodInfo>>> s_MethodInfos = new Dictionary<Type, Dictionary<string, List<MethodInfo>>>();
+        public static Dictionary<Type, Dictionary<string, List<MethodInfo>>> methodInfos { get { return s_MethodInfos; } }
 
         static MethodInfo GetMethod(Type t, string name, Type[] ts)
         {
             Dictionary<string, List<MethodInfo>> map = null;
             List<MethodInfo> list = null;
 
-            if (!dict.TryGetValue(t, out map))
+            if (!s_MethodInfos.TryGetValue(t, out map))
             {
                 map = new Dictionary<string, List<MethodInfo>>();
-                dict.Add(t, map);
+                s_MethodInfos.Add(t, map);
             }
 
             if (!map.TryGetValue(name, out list))

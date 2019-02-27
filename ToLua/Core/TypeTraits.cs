@@ -68,7 +68,7 @@ namespace LuaInterface
 
             if (metaref > 0)
             {
-                LuaState.Get(L).OnDestroy += () => { metaref = -1; };
+                LuaState.Get(L).onDestroy += () => { metaref = -1; };
             }
 
             return metaref;

@@ -37,14 +37,14 @@ namespace LuaInterface
     {
         public delegate object LuaTableToVar(IntPtr L, int pos);
         public delegate void LuaPushVarObject(IntPtr L, object o);
-        static Type monoType = typeof(Type).GetType();
-        static public LuaTableToVar[] ToVarMap = new LuaTableToVar[LuaValueType.Max];        
-        static public Dictionary<Type, LuaPushVarObject> VarPushMap  = new Dictionary<Type, LuaPushVarObject>();
+        private static Type s_MonoType = typeof(Type).GetType();
+        public static LuaTableToVar[] toVarArray= new LuaTableToVar[LuaValueType.max];
+        public static Dictionary<Type, LuaPushVarObject> varPushDic  = new Dictionary<Type, LuaPushVarObject>();
 
 #if UNITY_EDITOR
-        static int _instanceID = -1;
-        static int _line = 201;
-        private static object consoleWindow;
+        private static int s_InstanceID = -1;
+        private static int s_Line = 201;
+        private static object s_ConsoleWindow;
         private static object logListView;
         private static FieldInfo logListViewCurrentRow;
         private static MethodInfo LogEntriesGetEntry;
@@ -54,14 +54,14 @@ namespace LuaInterface
 
         static ToLua()
         {
-            ToVarMap[LuaValueType.Vector3] = ToObjectVec3;
-            ToVarMap[LuaValueType.Quaternion] = ToObjectQuat;
-            ToVarMap[LuaValueType.Vector2] = ToObjectVec2;
-            ToVarMap[LuaValueType.Color] = ToObjectColor;
-            ToVarMap[LuaValueType.Vector4] = ToObjectVec4;
-            ToVarMap[LuaValueType.Ray] = ToObjectRay;
-            ToVarMap[LuaValueType.LayerMask] = ToObjectLayerMask;
-            ToVarMap[LuaValueType.Bounds] = ToObjectBounds;
+            toVarArray[LuaValueType.vector3] = ToObjectVec3;
+            toVarArray[LuaValueType.quaternion] = ToObjectQuat;
+            toVarArray[LuaValueType.vector2] = ToObjectVec2;
+            toVarArray[LuaValueType.color] = ToObjectColor;
+            toVarArray[LuaValueType.vector4] = ToObjectVec4;
+            toVarArray[LuaValueType.ray] = ToObjectRay;
+            toVarArray[LuaValueType.layerMask] = ToObjectLayerMask;
+            toVarArray[LuaValueType.bounds] = ToObjectBounds;
         }
 
         public static void OpenLibs(IntPtr L)
@@ -378,7 +378,7 @@ namespace LuaInterface
             {
                 int ret = LuaDLL.tolua_getvaluetype(L, -1);
 
-                if (ret != LuaValueType.None)
+                if (ret != LuaValueType.none)
                 {
                     Type t = TypeChecker.LuaValueTypeMap[ret];
                     Push(L, t);
@@ -441,16 +441,16 @@ namespace LuaInterface
                 Assembly unityEditorAssembly = Assembly.GetAssembly(typeof(EditorWindow));
                 Type consoleWindowType = unityEditorAssembly.GetType("UnityEditor.ConsoleWindow");
                 FieldInfo fieldInfo = consoleWindowType.GetField("ms_ConsoleWindow", BindingFlags.Static | BindingFlags.NonPublic);
-                consoleWindow = fieldInfo.GetValue(null);
+                s_ConsoleWindow = fieldInfo.GetValue(null);
 
-                if (consoleWindow == null)
+                if (s_ConsoleWindow == null)
                 {
                     logListView = null;
                     return false;
                 }
 
                 FieldInfo listViewFieldInfo = consoleWindowType.GetField("m_ListView", BindingFlags.Instance | BindingFlags.NonPublic);
-                logListView = listViewFieldInfo.GetValue(consoleWindow);
+                logListView = listViewFieldInfo.GetValue(s_ConsoleWindow);
                 logListViewCurrentRow = listViewFieldInfo.FieldType.GetField("row", BindingFlags.Instance | BindingFlags.Public);
 #if UNITY_2017_1_OR_NEWER
                 Type logEntriesType = unityEditorAssembly.GetType("UnityEditor.LogEntries");
@@ -502,13 +502,13 @@ namespace LuaInterface
 
         static void GetToLuaInstanceID()
         {
-            if (_instanceID == -1)
+            if (s_InstanceID == -1)
             {
                 int start = LuaConst.toluaDir.IndexOf("Assets");
                 int end = LuaConst.toluaDir.LastIndexOf("/Lua");
                 string dir = LuaConst.toluaDir.Substring(start, end - start);
                 dir += "/Core/ToLua.cs";
-                _instanceID = AssetDatabase.LoadAssetAtPath(dir, typeof(MonoScript)).GetInstanceID();//"Assets/ToLua/Core/ToLua.cs"
+                s_InstanceID = AssetDatabase.LoadAssetAtPath(dir, typeof(MonoScript)).GetInstanceID();//"Assets/ToLua/Core/ToLua.cs"
             }
         }
 
@@ -517,12 +517,12 @@ namespace LuaInterface
         {
             GetToLuaInstanceID();
 
-            if (!GetConsoleWindowListView() || (object)EditorWindow.focusedWindow != consoleWindow)
+            if (!GetConsoleWindowListView() || (object)EditorWindow.focusedWindow != s_ConsoleWindow)
             {
                 return false;
             }
 
-            if (instanceID == _instanceID && line == _line)
+            if (instanceID == s_InstanceID && line == s_Line)
             {
                 string fileName = GetListViewRowCount(ref line);
 
@@ -754,9 +754,9 @@ namespace LuaInterface
                 case LuaTypes.LUA_TUSERDATA:                    
                     switch(LuaDLL.tolua_getvaluetype(L, stackPos))
                     {                                                    
-                        case LuaValueType.Int64:
+                        case LuaValueType.int64:
                             return LuaDLL.tolua_toint64(L, stackPos);
-                        case LuaValueType.UInt64:
+                        case LuaValueType.uint64:
                             return LuaDLL.tolua_touint64(L, stackPos);
                         default:
                             return ToObject(L, stackPos);
@@ -797,7 +797,7 @@ namespace LuaInterface
         {
             stackPos = LuaDLL.abs_index(L, stackPos);
             int ret = LuaDLL.tolua_getvaluetype(L, stackPos);
-            LuaTableToVar _ToObject = ToVarMap[ret];
+            LuaTableToVar _ToObject = toVarArray[ret];
 
             if (_ToObject != null)
             {
@@ -1148,7 +1148,7 @@ namespace LuaInterface
         {
             int type = LuaDLL.tolua_getvaluetype(L, stackPos);
 
-            if (type != LuaValueType.Vector3)
+            if (type != LuaValueType.vector3)
             {
                 LuaDLL.luaL_typerror(L, stackPos, "Vector3", LuaValueTypeName.Get(type));
                 return Vector3.zero;
@@ -1163,7 +1163,7 @@ namespace LuaInterface
         {
             int type = LuaDLL.tolua_getvaluetype(L, stackPos);
 
-            if (type != LuaValueType.Quaternion)
+            if (type != LuaValueType.quaternion)
             {
                 LuaDLL.luaL_typerror(L, stackPos, "Quaternion", LuaValueTypeName.Get(type));
                 return Quaternion.identity;
@@ -1178,7 +1178,7 @@ namespace LuaInterface
         {
             int type = LuaDLL.tolua_getvaluetype(L, stackPos);
 
-            if (type != LuaValueType.Vector2)
+            if (type != LuaValueType.vector2)
             {
                 LuaDLL.luaL_typerror(L, stackPos, "Vector2", LuaValueTypeName.Get(type));
                 return Vector2.zero;
@@ -1193,7 +1193,7 @@ namespace LuaInterface
         {
             int type = LuaDLL.tolua_getvaluetype(L, stackPos);
 
-            if (type != LuaValueType.Vector4)
+            if (type != LuaValueType.vector4)
             {
                 LuaDLL.luaL_typerror(L, stackPos, "Vector4", LuaValueTypeName.Get(type));
                 return Vector4.zero;
@@ -1208,7 +1208,7 @@ namespace LuaInterface
         {
             int type = LuaDLL.tolua_getvaluetype(L, stackPos);
 
-            if (type != LuaValueType.Color)
+            if (type != LuaValueType.color)
             {
                 LuaDLL.luaL_typerror(L, stackPos, "Color", LuaValueTypeName.Get(type));
                 return Color.black;
@@ -1223,7 +1223,7 @@ namespace LuaInterface
         {            
             int type = LuaDLL.tolua_getvaluetype(L, stackPos);
 
-            if (type != LuaValueType.Ray)
+            if (type != LuaValueType.ray)
             {
                 LuaDLL.luaL_typerror(L, stackPos, "Ray", LuaValueTypeName.Get(type));
                 return new Ray();
@@ -1236,7 +1236,7 @@ namespace LuaInterface
         {
             int type = LuaDLL.tolua_getvaluetype(L, stackPos);
 
-            if (type != LuaValueType.Bounds)
+            if (type != LuaValueType.bounds)
             {
                 LuaDLL.luaL_typerror(L, stackPos, "Bounds", LuaValueTypeName.Get(type));
                 return new Bounds();
@@ -1249,7 +1249,7 @@ namespace LuaInterface
         {
             int type = LuaDLL.tolua_getvaluetype(L, stackPos);
 
-            if (type != LuaValueType.LayerMask)
+            if (type != LuaValueType.layerMask)
             {
                 LuaDLL.luaL_typerror(L, stackPos, "LayerMask", LuaValueTypeName.Get(type));
                 return 0;
@@ -2764,7 +2764,7 @@ namespace LuaInterface
                 {
                     LuaPushVarObject _Push = null;
 
-                    if (VarPushMap.TryGetValue(t, out _Push))
+                    if (varPushDic.TryGetValue(t, out _Push))
                     {
                         _Push(L, obj);
                     }
@@ -2808,7 +2808,7 @@ namespace LuaInterface
                 {
                     Push(L, (EventObject)obj);
                 }
-                else if (t == monoType)
+                else if (t == s_MonoType)
                 {
                     Push(L, (Type)obj);
                 }

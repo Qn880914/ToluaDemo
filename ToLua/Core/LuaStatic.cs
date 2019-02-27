@@ -20,8 +20,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 using System;
-using System.IO;
-using System.Text;
 
 namespace LuaInterface
 {
@@ -66,74 +64,74 @@ namespace LuaInterface
         public static void GetUnpackRayRef(IntPtr L)
         {
             LuaState state = LuaState.Get(L);
-            LuaDLL.lua_getref(L, state.UnpackRay);
+            LuaDLL.lua_getref(L, state.unpackRay);
         }
 
         public static void GetUnpackBounds(IntPtr L)
         {
             LuaState state = LuaState.Get(L);
-            LuaDLL.lua_getref(L, state.UnpackBounds);
+            LuaDLL.lua_getref(L, state.unpackBounds);
         }
 
         public static void GetPackRay(IntPtr L)
         {
             LuaState state = LuaState.Get(L);
-            LuaDLL.lua_getref(L, state.PackRay);
+            LuaDLL.lua_getref(L, state.packRay);
         }
 
         public static void GetPackRaycastHit(IntPtr L)
         {
             LuaState state = LuaState.Get(L);
-            LuaDLL.lua_getref(L, state.PackRaycastHit);
+            LuaDLL.lua_getref(L, state.packRaycastHit);
         }
 
         public static void GetPackTouch(IntPtr L)
         {
             LuaState state = LuaState.Get(L);
-            LuaDLL.lua_getref(L, state.PackTouch);
+            LuaDLL.lua_getref(L, state.packTouch);
         }
 
         public static void GetPackBounds(IntPtr L)
         {
             LuaState state = LuaState.Get(L);
-            LuaDLL.lua_getref(L, state.PackBounds);
+            LuaDLL.lua_getref(L, state.packBounds);
         }
         
         public static int GetArrayMetatable(IntPtr L)
         {
             LuaState state = LuaState.Get(L);
-            return state.ArrayMetatable;
+            return state.arrayMetatable;
         }
 
         public static int GetTypeMetatable(IntPtr L)
         {
             LuaState state = LuaState.Get(L);
-            return state.TypeMetatable;
+            return state.typeMetatable;
         }        
 
         public static int GetDelegateMetatable(IntPtr L)
         {
             LuaState state = LuaState.Get(L);
-            return state.DelegateMetatable;
+            return state.delegateMetatable;
         }
 
         public static int GetEventMetatable(IntPtr L)
         {
             LuaState state = LuaState.Get(L);
-            return state.EventMetatable;
+            return state.eventMetatable;
         }
 
         public static int GetIterMetatable(IntPtr L)
         {
             LuaState state = LuaState.Get(L);
-            return state.IterMetatable;
+            return state.iterMetatable;
         }
 
         public static int GetEnumObject(IntPtr L, System.Enum e, out object obj)
         {
             LuaState state = LuaState.Get(L);
             obj = state.GetEnumObj(e);
-            return state.EnumMetatable;
+            return state.enumMetatable;
         }        
 
         public static LuaCSFunction GetPreModule(IntPtr L, Type t)

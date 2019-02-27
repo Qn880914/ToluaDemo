@@ -125,7 +125,7 @@ public class TestDelegate: MonoBehaviour
         LuaBinder.Bind(state);
         Bind(state);
 
-        state.LogGC = true;
+        state.logGC = true;
         state.DoString(script);
         GameObject go = new GameObject("TestGo");
         listener = (TestEventListener)go.AddComponent(typeof(TestEventListener));

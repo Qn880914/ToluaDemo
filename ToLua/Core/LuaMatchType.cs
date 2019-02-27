@@ -19,9 +19,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine;
 
 namespace LuaInterface
 {
@@ -46,7 +46,7 @@ namespace LuaInterface
                 case LuaTypes.LUA_TNUMBER:
                     return true;
                 case LuaTypes.LUA_TUSERDATA:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Int64;                    
+                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.int64;                    
                 default:
                     return false;
             }                        
@@ -61,7 +61,7 @@ namespace LuaInterface
                 case LuaTypes.LUA_TNUMBER:
                     return LuaDLL.lua_tonumber(L, pos) >= 0;
                 case LuaTypes.LUA_TUSERDATA:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.UInt64;                    
+                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.uint64;                    
                 default:
                     return false;
             }
@@ -90,7 +90,7 @@ namespace LuaInterface
                 case LuaTypes.LUA_TNUMBER:
                     return true;
                 case LuaTypes.LUA_TUSERDATA:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Int64;                    
+                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.int64;                    
                 default:
                     return false;
             }
@@ -107,7 +107,7 @@ namespace LuaInterface
                 case LuaTypes.LUA_TNUMBER:
                     return true;
                 case LuaTypes.LUA_TUSERDATA:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.UInt64;                    
+                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.uint64;                    
                 default:
                     return false;
             }
@@ -266,7 +266,7 @@ namespace LuaInterface
         {
             if (LuaDLL.lua_type(L, pos) == LuaTypes.LUA_TTABLE)
             {
-                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Vector3;
+                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.vector3;
             }
 
             return false;            
@@ -276,7 +276,7 @@ namespace LuaInterface
         {
             if (LuaDLL.lua_type(L, pos) == LuaTypes.LUA_TTABLE)
             {
-                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Quaternion;
+                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.quaternion;
             }
 
             return false;            
@@ -286,7 +286,7 @@ namespace LuaInterface
         {
             if (LuaDLL.lua_type(L, pos) == LuaTypes.LUA_TTABLE)
             {
-                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Vector2;
+                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.vector2;
             }
 
             return false;            
@@ -296,7 +296,7 @@ namespace LuaInterface
         {
             if (LuaDLL.lua_type(L, pos) == LuaTypes.LUA_TTABLE)
             {
-                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Color;
+                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.color;
             }
 
             return false;            
@@ -306,7 +306,7 @@ namespace LuaInterface
         {
             if (LuaDLL.lua_type(L, pos) == LuaTypes.LUA_TTABLE)
             {
-                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Vector4;
+                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.vector4;
             }
 
             return false;            
@@ -316,7 +316,7 @@ namespace LuaInterface
         {
             if (LuaDLL.lua_type(L, pos) == LuaTypes.LUA_TTABLE)
             {
-                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Ray;
+                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.ray;
             }
 
             return false;            
@@ -326,7 +326,7 @@ namespace LuaInterface
         {
             if (LuaDLL.lua_type(L, pos) == LuaTypes.LUA_TTABLE)
             {
-                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Bounds;
+                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.bounds;
             }
 
             return false;            
@@ -336,7 +336,7 @@ namespace LuaInterface
         {
             if (LuaDLL.lua_type(L, pos) == LuaTypes.LUA_TTABLE)
             {
-                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Touch;
+                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.touch;
             }
 
             return false;            
@@ -346,7 +346,7 @@ namespace LuaInterface
         {
             if (LuaDLL.lua_type(L, pos) == LuaTypes.LUA_TTABLE)
             {
-                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.LayerMask;
+                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.layerMask;
             }
 
             return false;            
@@ -356,7 +356,7 @@ namespace LuaInterface
         {
             if (LuaDLL.lua_type(L, pos) == LuaTypes.LUA_TTABLE)
             {
-                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.RaycastHit;
+                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.raycastHit;
             }
 
             return false;            
@@ -371,7 +371,7 @@ namespace LuaInterface
                 case LuaTypes.LUA_TNIL:
                     return true;
                 case LuaTypes.LUA_TTABLE:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Vector3;
+                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.vector3;
                 default:
                     return false;
             }
@@ -386,7 +386,7 @@ namespace LuaInterface
                 case LuaTypes.LUA_TNIL:
                     return true;
                 case LuaTypes.LUA_TTABLE:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Quaternion;
+                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.quaternion;
                 default:
                     return false;
             }
@@ -401,7 +401,7 @@ namespace LuaInterface
                 case LuaTypes.LUA_TNIL:
                     return true;
                 case LuaTypes.LUA_TTABLE:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Vector2;
+                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.vector2;
                 default:
                     return false;
             }
@@ -416,7 +416,7 @@ namespace LuaInterface
                 case LuaTypes.LUA_TNIL:
                     return true;
                 case LuaTypes.LUA_TTABLE:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Color;
+                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.color;
                 default:
                     return false;
             }
@@ -431,7 +431,7 @@ namespace LuaInterface
                 case LuaTypes.LUA_TNIL:
                     return true;
                 case LuaTypes.LUA_TTABLE:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Vector4;
+                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.vector4;
                 default:
                     return false;
             }
@@ -446,7 +446,7 @@ namespace LuaInterface
                 case LuaTypes.LUA_TNIL:
                     return true;
                 case LuaTypes.LUA_TTABLE:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Ray;
+                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.ray;
                 default:
                     return false;
             }
@@ -461,7 +461,7 @@ namespace LuaInterface
                 case LuaTypes.LUA_TNIL:
                     return true;
                 case LuaTypes.LUA_TTABLE:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Bounds;
+                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.bounds;
                 default:
                     return false;
             }
@@ -476,7 +476,7 @@ namespace LuaInterface
                 case LuaTypes.LUA_TNIL:
                     return true;
                 case LuaTypes.LUA_TTABLE:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Touch;
+                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.touch;
                 default:
                     return false;
             }
@@ -491,7 +491,7 @@ namespace LuaInterface
                 case LuaTypes.LUA_TNIL:
                     return true;
                 case LuaTypes.LUA_TTABLE:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.LayerMask;
+                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.layerMask;
                 default:
                     return false;
             }
@@ -506,7 +506,7 @@ namespace LuaInterface
                 case LuaTypes.LUA_TNIL:
                     return true;
                 case LuaTypes.LUA_TTABLE:
-                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.RaycastHit;
+                    return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.raycastHit;
                 default:
                     return false;
             }

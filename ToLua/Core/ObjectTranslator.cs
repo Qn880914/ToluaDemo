@@ -37,9 +37,9 @@ namespace LuaInterface
                 this.obj = obj;
             }
 
-            public int id;
-            public UnityEngine.Object obj;
-            public float time;
+            public int id { get; set; }
+            public UnityEngine.Object obj { get; set; }
+            public float time { get; set; }
         }
 
         private class CompareObject : IEqualityComparer<object>
@@ -55,21 +55,21 @@ namespace LuaInterface
             }
         }
 
-        public bool LogGC { get; set; }
-        public readonly Dictionary<object, int> objectsBackMap = new Dictionary<object, int>(257, new CompareObject());
+        public bool logGC { get; set; }
+        public readonly Dictionary<object, int> objectsBackDic = new Dictionary<object, int>(257, new CompareObject());
         public readonly LuaObjectPool objects = new LuaObjectPool();
         private List<DelayGC> gcList = new List<DelayGC>();
         private Action<object, int> removeInvalidObject;
 
 #if !MULTI_STATE
-        private static ObjectTranslator _translator = null;
+        private static ObjectTranslator m_Translator = null;
 #endif
 
         public ObjectTranslator()
         {
-            LogGC = false;
+            logGC = false;
 #if !MULTI_STATE
-            _translator = this;
+            m_Translator = this;
 #endif
             removeInvalidObject = RemoveObject;
         }
@@ -80,7 +80,7 @@ namespace LuaInterface
 
             if (!TypeChecker.IsValueType(obj.GetType()))
             {
-                objectsBackMap[obj] = index;
+                objectsBackDic[obj] = index;
             }
 
             return index;
@@ -89,7 +89,7 @@ namespace LuaInterface
         public static ObjectTranslator Get(IntPtr L)
         {
 #if !MULTI_STATE
-                return _translator;
+                return m_Translator;
 #else
                 return LuaState.GetTranslator(L);
 #endif
@@ -100,9 +100,9 @@ namespace LuaInterface
         {
             int index = -1;
             
-            if (objectsBackMap.TryGetValue(o, out index) && index == udata)
+            if (objectsBackDic.TryGetValue(o, out index) && index == udata)
             {
-                objectsBackMap.Remove(o);
+                objectsBackDic.Remove(o);
             }
         }
 
@@ -119,7 +119,7 @@ namespace LuaInterface
                     RemoveObject(o, udata);
                 }
 
-                if (LogGC)
+                if (logGC)
                 {
                     Debugger.Log("gc object {0}, id {1}", o, udata);
                 }
@@ -143,7 +143,7 @@ namespace LuaInterface
                     RemoveObject(o, udata);
                 }
 
-                if (LogGC)
+                if (logGC)
                 {
                     Debugger.Log("destroy object {0}, id {1}", o, udata);
                 }
@@ -164,7 +164,7 @@ namespace LuaInterface
         public bool Getudata(object o, out int index)
         {
             index = -1;
-            return objectsBackMap.TryGetValue(o, out index);
+            return objectsBackDic.TryGetValue(o, out index);
         }
 
         public void Destroyudata(int udata)
@@ -201,7 +201,7 @@ namespace LuaInterface
                 //一定不能Remove, 因为GC还可能再来一次
                 objects.Destroy(udata);     
 
-                if (LogGC)
+                if (logGC)
                 {
                     Debugger.Log("destroy object {0}, id {1}", o, udata);
                 }
@@ -242,11 +242,11 @@ namespace LuaInterface
 
         public void Dispose()
         {
-            objectsBackMap.Clear();
-            objects.Clear();     
-            
+            objectsBackDic.Clear();
+            objects.Clear();
+
 #if !MULTI_STATE
-            _translator = null;
+            m_Translator = null;
 #endif
         }
     }

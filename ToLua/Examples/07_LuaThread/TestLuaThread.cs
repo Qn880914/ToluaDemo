@@ -48,7 +48,7 @@ public class TestLuaThread : MonoBehaviour
         new LuaResLoader();
         state = new LuaState();
         state.Start();
-        state.LogGC = true;
+        state.logGC = true;
         state.DoString(script);
 
         LuaFunction func = state.GetFunction("Test");

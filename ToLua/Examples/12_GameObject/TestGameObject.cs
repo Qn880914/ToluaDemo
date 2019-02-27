@@ -37,7 +37,7 @@ public class TestGameObject: MonoBehaviour
 #endif
         new LuaResLoader();
         lua = new LuaState();
-        lua.LogGC = true;
+        lua.logGC = true;
         lua.Start();
         LuaBinder.Bind(lua);
         lua.DoString(script, "TestGameObject.cs");

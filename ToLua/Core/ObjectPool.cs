@@ -29,8 +29,8 @@ namespace LuaInterface
     {        
         class PoolNode
         {
-            public int index;
-            public object obj;
+            public int index { get; set; }
+            public object obj { get; set; }
 
             public PoolNode(int index, object obj)
             {
@@ -39,29 +39,29 @@ namespace LuaInterface
             }
         }
 
-        private List<PoolNode> list;
+        private List<PoolNode> m_NodeList;
         //同lua_ref策略，0作为一个回收链表头，不使用这个位置
-        private PoolNode head = null;   
-        private int count = 0;
-        private int collectStep = 2;
-        private int collectedIndex = -1;
+        private PoolNode m_NodeHead = null;   
+        private int m_Count = 0;
+        private int m_CollectStep = 2;
+        private int m_CollectedIndex = -1;
 
         public LuaObjectPool()
         {
-            list = new List<PoolNode>(1024);
-            head = new PoolNode(0, null);
-            list.Add(head);
-            list.Add(new PoolNode(1, null));
-            count = list.Count;
+            m_NodeList = new List<PoolNode>(1024);
+            m_NodeHead = new PoolNode(0, null);
+            m_NodeList.Add(m_NodeHead);
+            m_NodeList.Add(new PoolNode(1, null));
+            m_Count = m_NodeList.Count;
         }
 
         public object this[int i]
         {
             get 
             {
-                if (i > 0 && i < count)
+                if (i > 0 && i < m_Count)
                 {
-                    return list[i].obj;
+                    return m_NodeList[i].obj;
                 }
 
                 return null;
@@ -70,26 +70,26 @@ namespace LuaInterface
 
         public void Clear()
         {
-            list.Clear();
-            head = null;
-            count = 0;
+            m_NodeList.Clear();
+            m_NodeHead = null;
+            m_Count = 0;
         }
 
         public int Add(object obj)
         {
             int pos = -1;
 
-            if (head.index != 0)
+            if (m_NodeHead.index != 0)
             {
-                pos = head.index;
-                list[pos].obj = obj;
-                head.index = list[pos].index;
+                pos = m_NodeHead.index;
+                m_NodeList[pos].obj = obj;
+                m_NodeHead.index = m_NodeList[pos].index;
             }
             else
             {
-                pos = list.Count;
-                list.Add(new PoolNode(pos, obj));
-                count = pos + 1;
+                pos = m_NodeList.Count;
+                m_NodeList.Add(new PoolNode(pos, obj));
+                m_Count = pos + 1;
             }
 
             return pos;
@@ -97,9 +97,9 @@ namespace LuaInterface
 
         public object TryGetValue(int index)
         {
-            if (index > 0 && index < count)
+            if (index > 0 && index < m_Count)
             {
-                return list[index].obj;                
+                return m_NodeList[index].obj;                
             }
             
             return null;
@@ -107,12 +107,12 @@ namespace LuaInterface
 
         public object Remove(int pos)
         {
-            if (pos > 0 && pos < count)
+            if (pos > 0 && pos < m_Count)
             {
-                object o = list[pos].obj;
-                list[pos].obj = null;                
-                list[pos].index = head.index;
-                head.index = pos;
+                object o = m_NodeList[pos].obj;
+                m_NodeList[pos].obj = null;
+                m_NodeList[pos].index = m_NodeHead.index;
+                m_NodeHead.index = pos;
 
                 return o;
             }
@@ -122,10 +122,10 @@ namespace LuaInterface
 
         public object Destroy(int pos)
         {
-            if (pos > 0 && pos < count)
+            if (pos > 0 && pos < m_Count)
             {
-                object o = list[pos].obj;
-                list[pos].obj = null;
+                object o = m_NodeList[pos].obj;
+                m_NodeList[pos].obj = null;
                 return o;
             }
 
@@ -134,24 +134,24 @@ namespace LuaInterface
 
         public void StepCollect(Action<object, int> collectListener)
         {
-            ++collectedIndex;
-            for (int i = 0; i < collectStep; ++i)
+            ++m_CollectedIndex;
+            for (int i = 0; i < m_CollectStep; ++i)
             {
-                collectedIndex += i;
-                if (collectedIndex >= count)
+                m_CollectedIndex += i;
+                if (m_CollectedIndex >= m_Count)
                 {
-                    collectedIndex = -1;
+                    m_CollectedIndex = -1;
                     return;
                 }
 
-                var node = list[collectedIndex];
+                var node = m_NodeList[m_CollectedIndex];
                 object o = node.obj;
                 if (o != null && o.Equals(null))
                 {
                     node.obj = null;
                     if (collectListener != null)
                     {
-                        collectListener(o, collectedIndex);
+                        collectListener(o, m_CollectedIndex);
                     }
                 }
             }
@@ -159,10 +159,10 @@ namespace LuaInterface
 
         public object Replace(int pos, object o)
         {
-            if (pos > 0 && pos < count)
+            if (pos > 0 && pos < m_Count)
             {
-                object obj = list[pos].obj;
-                list[pos].obj = o;
+                object obj = m_NodeList[pos].obj;
+                m_NodeList[pos].obj = o;
                 return obj;
             }
 

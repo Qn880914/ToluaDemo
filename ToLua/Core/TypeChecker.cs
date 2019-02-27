@@ -27,23 +27,23 @@ namespace LuaInterface
 {
     public static class TypeChecker
     {
-        public static Type[] LuaValueTypeMap = new Type[LuaValueType.Max];                
+        public static Type[] LuaValueTypeMap = new Type[LuaValueType.max];                
 
         static TypeChecker()
         {
-            LuaValueTypeMap[LuaValueType.None] = null;
-            LuaValueTypeMap[LuaValueType.Vector3] = typeof(Vector3);
-            LuaValueTypeMap[LuaValueType.Quaternion] = typeof(Quaternion);
-            LuaValueTypeMap[LuaValueType.Vector2] = typeof(Vector2);
-            LuaValueTypeMap[LuaValueType.Color] = typeof(Color);
-            LuaValueTypeMap[LuaValueType.Vector4] = typeof(Vector4);
-            LuaValueTypeMap[LuaValueType.Ray] = typeof(Ray);
-            LuaValueTypeMap[LuaValueType.Bounds] = typeof(Bounds);
-            LuaValueTypeMap[LuaValueType.Touch] = typeof(Touch);
-            LuaValueTypeMap[LuaValueType.LayerMask] = typeof(LayerMask);
-            LuaValueTypeMap[LuaValueType.RaycastHit] = typeof(RaycastHit);
-            LuaValueTypeMap[LuaValueType.Int64] = typeof(long);
-            LuaValueTypeMap[LuaValueType.UInt64] = typeof(ulong);
+            LuaValueTypeMap[LuaValueType.none] = null;
+            LuaValueTypeMap[LuaValueType.vector3] = typeof(Vector3);
+            LuaValueTypeMap[LuaValueType.quaternion] = typeof(Quaternion);
+            LuaValueTypeMap[LuaValueType.vector2] = typeof(Vector2);
+            LuaValueTypeMap[LuaValueType.color] = typeof(Color);
+            LuaValueTypeMap[LuaValueType.vector4] = typeof(Vector4);
+            LuaValueTypeMap[LuaValueType.ray] = typeof(Ray);
+            LuaValueTypeMap[LuaValueType.bounds] = typeof(Bounds);
+            LuaValueTypeMap[LuaValueType.touch] = typeof(Touch);
+            LuaValueTypeMap[LuaValueType.layerMask] = typeof(LayerMask);
+            LuaValueTypeMap[LuaValueType.raycastHit] = typeof(RaycastHit);
+            LuaValueTypeMap[LuaValueType.int64] = typeof(long);
+            LuaValueTypeMap[LuaValueType.uint64] = typeof(ulong);
         }        
 
         public static bool IsValueType(Type t)
@@ -245,11 +245,11 @@ namespace LuaInterface
         {
             if (t == typeof(long))
             {
-                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.Int64;                
+                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.int64;                
             }
             else if (t == typeof(ulong))
             {
-                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.UInt64;                
+                return LuaDLL.tolua_getvaluetype(L, pos) == LuaValueType.uint64;                
             }
 
             object obj = null;
@@ -297,7 +297,7 @@ namespace LuaInterface
         {
             int type = LuaDLL.tolua_getvaluetype(L, pos);
 
-            if (type != LuaValueType.None)
+            if (type != LuaValueType.none)
             {
                 return t == LuaValueTypeMap[type];
             }
