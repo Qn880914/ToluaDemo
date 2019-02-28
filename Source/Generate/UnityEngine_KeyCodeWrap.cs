@@ -330,7 +330,7 @@ public class UnityEngine_KeyCodeWrap
 		L.RegVar("Joystick8Button19", get_Joystick8Button19, null);
 		L.RegFunction("IntToEnum", IntToEnum);
 		L.EndEnum();
-		TypeTraits<UnityEngine.KeyCode>.Check = CheckType;
+		TypeTraits<UnityEngine.KeyCode>.check = CheckType;
 		StackTraits<UnityEngine.KeyCode>.Push = Push;
 	}
 

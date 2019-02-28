@@ -11,7 +11,7 @@ public class UnityEngine_AnimationBlendModeWrap
 		L.RegVar("Additive", get_Additive, null);
 		L.RegFunction("IntToEnum", IntToEnum);
 		L.EndEnum();
-		TypeTraits<UnityEngine.AnimationBlendMode>.Check = CheckType;
+		TypeTraits<UnityEngine.AnimationBlendMode>.check = CheckType;
 		StackTraits<UnityEngine.AnimationBlendMode>.Push = Push;
 	}
 

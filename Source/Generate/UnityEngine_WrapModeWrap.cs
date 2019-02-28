@@ -15,7 +15,7 @@ public class UnityEngine_WrapModeWrap
 		L.RegVar("Clamp", get_Clamp, null);
 		L.RegFunction("IntToEnum", IntToEnum);
 		L.EndEnum();
-		TypeTraits<UnityEngine.WrapMode>.Check = CheckType;
+		TypeTraits<UnityEngine.WrapMode>.check = CheckType;
 		StackTraits<UnityEngine.WrapMode>.Push = Push;
 	}
 

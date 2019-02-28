@@ -142,7 +142,7 @@ public class PassStruct : LuaClient
         TypeTraits<Rect>.Init(CheckRectType);                                    //支持重载函数TypeCheck.CheckTypes
         TypeTraits<Nullable<Rect>>.Init(CheckNullRectType);                      //支持重载函数TypeCheck.CheckTypes
         LuaValueTypeName.names[LuaValueType.Rect] = "Rect";                      //CheckType失败提示的名字
-        TypeChecker.LuaValueTypeMap[LuaValueType.Rect] = typeof(Rect);           //用于支持类型匹配检查操作
+        TypeChecker.luaValueTypeMap[LuaValueType.Rect] = typeof(Rect);           //用于支持类型匹配检查操作
         ToLua.toVarArray[LuaValueType.Rect] = ToRectTable;                         //Rect作为object读取
         ToLua.varPushDic[typeof(Rect)] = (L, o) => { PushRect(L, (Rect)o); };    //Rect作为object压入
 

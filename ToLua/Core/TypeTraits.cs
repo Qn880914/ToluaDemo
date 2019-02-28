@@ -19,15 +19,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-using UnityEngine;
 using System;
-using System.Collections;
 
 namespace LuaInterface
 {
     public static class TypeTraits<T>
-    {        
-        static public Func<IntPtr, int, bool> Check = DefaultCheck;
+    {
+        public static Func<IntPtr, int, bool> check = DefaultCheck;
         static public Type type = typeof(T);
         static public bool IsValueType = type.IsValueType;
         static public bool IsArray = type.IsArray;
@@ -40,7 +38,7 @@ namespace LuaInterface
         {            
             if (check != null)
             {
-                Check = check;
+                TypeTraits<T>.check = check;
             }
         }
 

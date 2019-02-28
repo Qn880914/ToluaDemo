@@ -11,7 +11,7 @@ public class UnityEngine_SpaceWrap
 		L.RegVar("Self", get_Self, null);
 		L.RegFunction("IntToEnum", IntToEnum);
 		L.EndEnum();
-		TypeTraits<UnityEngine.Space>.Check = CheckType;
+		TypeTraits<UnityEngine.Space>.check = CheckType;
 		StackTraits<UnityEngine.Space>.Push = Push;
 	}
 

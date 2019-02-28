@@ -12,7 +12,7 @@ public class UnityEngine_BlendWeightsWrap
 		L.RegVar("FourBones", get_FourBones, null);
 		L.RegFunction("IntToEnum", IntToEnum);
 		L.EndEnum();
-		TypeTraits<UnityEngine.BlendWeights>.Check = CheckType;
+		TypeTraits<UnityEngine.BlendWeights>.check = CheckType;
 		StackTraits<UnityEngine.BlendWeights>.Push = Push;
 	}
 

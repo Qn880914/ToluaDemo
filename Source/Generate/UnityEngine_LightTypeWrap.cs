@@ -13,7 +13,7 @@ public class UnityEngine_LightTypeWrap
 		L.RegVar("Area", get_Area, null);
 		L.RegFunction("IntToEnum", IntToEnum);
 		L.EndEnum();
-		TypeTraits<UnityEngine.LightType>.Check = CheckType;
+		TypeTraits<UnityEngine.LightType>.check = CheckType;
 		StackTraits<UnityEngine.LightType>.Push = Push;
 	}
 

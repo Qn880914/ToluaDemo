@@ -14,7 +14,7 @@ public class UnityEngine_CameraClearFlagsWrap
 		L.RegVar("Nothing", get_Nothing, null);
 		L.RegFunction("IntToEnum", IntToEnum);
 		L.EndEnum();
-		TypeTraits<UnityEngine.CameraClearFlags>.Check = CheckType;
+		TypeTraits<UnityEngine.CameraClearFlags>.check = CheckType;
 		StackTraits<UnityEngine.CameraClearFlags>.Push = Push;
 	}
 

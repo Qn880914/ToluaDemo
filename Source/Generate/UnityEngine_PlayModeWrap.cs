@@ -11,7 +11,7 @@ public class UnityEngine_PlayModeWrap
 		L.RegVar("StopAll", get_StopAll, null);
 		L.RegFunction("IntToEnum", IntToEnum);
 		L.EndEnum();
-		TypeTraits<UnityEngine.PlayMode>.Check = CheckType;
+		TypeTraits<UnityEngine.PlayMode>.check = CheckType;
 		StackTraits<UnityEngine.PlayMode>.Push = Push;
 	}
 

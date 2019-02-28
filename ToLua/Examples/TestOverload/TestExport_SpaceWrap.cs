@@ -10,7 +10,7 @@ public class TestExport_SpaceWrap
 		L.RegVar("World", get_World, null);
 		L.RegFunction("IntToEnum", IntToEnum);
 		L.EndEnum();
-		TypeTraits<TestExport.Space>.Check = CheckType;
+		TypeTraits<TestExport.Space>.check = CheckType;
 		StackTraits<TestExport.Space>.Push = Push;
 	}
 

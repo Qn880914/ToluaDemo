@@ -15,7 +15,7 @@ public class LuaInterface_InjectTypeWrap
 		L.RegVar("ReplaceWithPostInvokeBase", get_ReplaceWithPostInvokeBase, null);
 		L.RegFunction("IntToEnum", IntToEnum);
 		L.EndEnum();
-		TypeTraits<LuaInterface.InjectType>.Check = CheckType;
+		TypeTraits<LuaInterface.InjectType>.check = CheckType;
 		StackTraits<LuaInterface.InjectType>.Push = Push;
 	}
 

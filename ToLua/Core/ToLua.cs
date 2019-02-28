@@ -45,11 +45,11 @@ namespace LuaInterface
         private static int s_InstanceID = -1;
         private static int s_Line = 201;
         private static object s_ConsoleWindow;
-        private static object logListView;
-        private static FieldInfo logListViewCurrentRow;
-        private static MethodInfo LogEntriesGetEntry;
-        private static object logEntry;
-        private static FieldInfo logEntryCondition;
+        private static object s_LogListView;
+        private static FieldInfo s_LogListViewCurrentRow;
+        private static MethodInfo s_LogEntriesGetEntry;
+        private static object s_LogEntry;
+        private static FieldInfo s_LogEntryCondition;
 #endif                
 
         static ToLua()
@@ -380,7 +380,7 @@ namespace LuaInterface
 
                 if (ret != LuaValueType.none)
                 {
-                    Type t = TypeChecker.LuaValueTypeMap[ret];
+                    Type t = TypeChecker.luaValueTypeMap[ret];
                     Push(L, t);
                 }
                 else
@@ -436,7 +436,7 @@ namespace LuaInterface
 #if UNITY_EDITOR
         private static bool GetConsoleWindowListView()
         {
-            if (logListView == null)
+            if (s_LogListView == null)
             {
                 Assembly unityEditorAssembly = Assembly.GetAssembly(typeof(EditorWindow));
                 Type consoleWindowType = unityEditorAssembly.GetType("UnityEditor.ConsoleWindow");
@@ -445,24 +445,24 @@ namespace LuaInterface
 
                 if (s_ConsoleWindow == null)
                 {
-                    logListView = null;
+                    s_LogListView = null;
                     return false;
                 }
 
                 FieldInfo listViewFieldInfo = consoleWindowType.GetField("m_ListView", BindingFlags.Instance | BindingFlags.NonPublic);
-                logListView = listViewFieldInfo.GetValue(s_ConsoleWindow);
-                logListViewCurrentRow = listViewFieldInfo.FieldType.GetField("row", BindingFlags.Instance | BindingFlags.Public);
+                s_LogListView = listViewFieldInfo.GetValue(s_ConsoleWindow);
+                s_LogListViewCurrentRow = listViewFieldInfo.FieldType.GetField("row", BindingFlags.Instance | BindingFlags.Public);
 #if UNITY_2017_1_OR_NEWER
                 Type logEntriesType = unityEditorAssembly.GetType("UnityEditor.LogEntries");
-                LogEntriesGetEntry = logEntriesType.GetMethod("GetEntryInternal", BindingFlags.Static | BindingFlags.Public);
-                Type logEntryType = unityEditorAssembly.GetType("UnityEditor.LogEntry");                
+                s_LogEntriesGetEntry = logEntriesType.GetMethod("GetEntryInternal", BindingFlags.Static | BindingFlags.Public);
+                Type logEntryType = unityEditorAssembly.GetType("UnityEditor.LogEntry");
 #else
                 Type logEntriesType = unityEditorAssembly.GetType("UnityEditorInternal.LogEntries");                
-                LogEntriesGetEntry = logEntriesType.GetMethod("GetEntryInternal", BindingFlags.Static | BindingFlags.Public);
+                s_LogEntriesGetEntry = logEntriesType.GetMethod("GetEntryInternal", BindingFlags.Static | BindingFlags.Public);
                 Type logEntryType = unityEditorAssembly.GetType("UnityEditorInternal.LogEntry");
 #endif
-                logEntry = Activator.CreateInstance(logEntryType);
-                logEntryCondition = logEntryType.GetField("condition", BindingFlags.Instance | BindingFlags.Public);
+                s_LogEntry = Activator.CreateInstance(logEntryType);
+                s_LogEntryCondition = logEntryType.GetField("condition", BindingFlags.Instance | BindingFlags.Public);
             }
 
             return true;
@@ -471,9 +471,9 @@ namespace LuaInterface
 
         private static string GetListViewRowCount(ref int line)
         {
-            int row = (int)logListViewCurrentRow.GetValue(logListView);
-            LogEntriesGetEntry.Invoke(null, new object[] { row, logEntry });
-            string condition = logEntryCondition.GetValue(logEntry) as string;
+            int row = (int)s_LogListViewCurrentRow.GetValue(s_LogListView);
+            s_LogEntriesGetEntry.Invoke(null, new object[] { row, s_LogEntry });
+            string condition = s_LogEntryCondition.GetValue(s_LogEntry) as string;
             condition = condition.Substring(0, condition.IndexOf('\n'));
             int index = condition.IndexOf(".lua:");
 
@@ -1516,7 +1516,7 @@ namespace LuaInterface
                     {
                         LuaDLL.lua_rawgeti(L, stackPos, i);
 
-                        if (!TypeTraits<T>.Check(L, pos))
+                        if (!TypeTraits<T>.check(L, pos))
                         {
                             LuaDLL.lua_pop(L, 1);
                             LuaDLL.luaL_typerror(L, stackPos, typeof(T[]).FullName);
@@ -1550,7 +1550,7 @@ namespace LuaInterface
                     {
                         LuaDLL.lua_rawgeti(L, stackPos, i);                        
 
-                        if (!TypeTraits<T>.Check(L, pos))
+                        if (!TypeTraits<T>.check(L, pos))
                         {
                             LuaDLL.lua_pop(L, 1);
                             LuaDLL.luaL_typerror(L, stackPos, typeof(T[]).FullName);
@@ -1702,7 +1702,7 @@ namespace LuaInterface
                     {
                         LuaDLL.lua_rawgeti(L, stackPos, i);
 
-                        if (!TypeTraits<string>.Check(L, pos))
+                        if (!TypeTraits<string>.check(L, pos))
                         {
                             LuaDLL.lua_pop(L, 1);
                             LuaDLL.luaL_typerror(L, stackPos, "string[]");
@@ -2080,7 +2080,7 @@ namespace LuaInterface
                     {
                         LuaDLL.lua_rawgeti(L, stackPos, i);
 
-                        if (!TypeTraits<string>.Check(L, pos))
+                        if (!TypeTraits<string>.check(L, pos))
                         {
                             LuaDLL.lua_pop(L, 1);
                             LuaDLL.luaL_typerror(L, stackPos, "string[]");
@@ -2143,7 +2143,7 @@ namespace LuaInterface
                     {
                         LuaDLL.lua_rawgeti(L, stackPos, i);
 
-                        if (!TypeTraits<T>.Check(L, pos))
+                        if (!TypeTraits<T>.check(L, pos))
                         {
                             LuaDLL.lua_pop(L, 1);
                             LuaDLL.luaL_typerror(L, stackPos, typeof(T[]).FullName);
@@ -2179,7 +2179,7 @@ namespace LuaInterface
                     {
                         LuaDLL.lua_rawgeti(L, stackPos, i);
 
-                        if (!TypeTraits<T>.Check(L, pos))
+                        if (!TypeTraits<T>.check(L, pos))
                         {
                             LuaDLL.lua_pop(L, 1);
                             LuaDLL.luaL_typerror(L, stackPos, typeof(T[]).FullName);

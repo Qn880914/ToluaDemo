@@ -19,31 +19,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-using UnityEngine;
 using System;
-using System.Collections.Generic;
+using UnityEngine;
 
 namespace LuaInterface
 {
     public static class TypeChecker
     {
-        public static Type[] LuaValueTypeMap = new Type[LuaValueType.max];                
+        public static Type[] luaValueTypeMap = new Type[LuaValueType.max];                
 
         static TypeChecker()
         {
-            LuaValueTypeMap[LuaValueType.none] = null;
-            LuaValueTypeMap[LuaValueType.vector3] = typeof(Vector3);
-            LuaValueTypeMap[LuaValueType.quaternion] = typeof(Quaternion);
-            LuaValueTypeMap[LuaValueType.vector2] = typeof(Vector2);
-            LuaValueTypeMap[LuaValueType.color] = typeof(Color);
-            LuaValueTypeMap[LuaValueType.vector4] = typeof(Vector4);
-            LuaValueTypeMap[LuaValueType.ray] = typeof(Ray);
-            LuaValueTypeMap[LuaValueType.bounds] = typeof(Bounds);
-            LuaValueTypeMap[LuaValueType.touch] = typeof(Touch);
-            LuaValueTypeMap[LuaValueType.layerMask] = typeof(LayerMask);
-            LuaValueTypeMap[LuaValueType.raycastHit] = typeof(RaycastHit);
-            LuaValueTypeMap[LuaValueType.int64] = typeof(long);
-            LuaValueTypeMap[LuaValueType.uint64] = typeof(ulong);
+            luaValueTypeMap[LuaValueType.none] = null;
+            luaValueTypeMap[LuaValueType.vector3] = typeof(Vector3);
+            luaValueTypeMap[LuaValueType.quaternion] = typeof(Quaternion);
+            luaValueTypeMap[LuaValueType.vector2] = typeof(Vector2);
+            luaValueTypeMap[LuaValueType.color] = typeof(Color);
+            luaValueTypeMap[LuaValueType.vector4] = typeof(Vector4);
+            luaValueTypeMap[LuaValueType.ray] = typeof(Ray);
+            luaValueTypeMap[LuaValueType.bounds] = typeof(Bounds);
+            luaValueTypeMap[LuaValueType.touch] = typeof(Touch);
+            luaValueTypeMap[LuaValueType.layerMask] = typeof(LayerMask);
+            luaValueTypeMap[LuaValueType.raycastHit] = typeof(RaycastHit);
+            luaValueTypeMap[LuaValueType.int64] = typeof(long);
+            luaValueTypeMap[LuaValueType.uint64] = typeof(ulong);
         }        
 
         public static bool IsValueType(Type t)
@@ -299,7 +298,7 @@ namespace LuaInterface
 
             if (type != LuaValueType.none)
             {
-                return t == LuaValueTypeMap[type];
+                return t == luaValueTypeMap[type];
             }
 
             if (t.IsArray)
@@ -325,71 +324,71 @@ namespace LuaInterface
 
         public static bool CheckTypes<T1>(IntPtr L, int pos)
         {            
-            return TypeTraits<T1>.Check(L, pos);
+            return TypeTraits<T1>.check(L, pos);
         }
 
         public static bool CheckTypes<T1, T2>(IntPtr L, int pos)
         {
-            return TypeTraits<T1>.Check(L, pos) && TypeTraits<T2>.Check(L, pos + 1);
+            return TypeTraits<T1>.check(L, pos) && TypeTraits<T2>.check(L, pos + 1);
         }
 
         public static bool CheckTypes<T1, T2, T3>(IntPtr L, int pos)
         {
-            return TypeTraits<T1>.Check(L, pos) && TypeTraits<T2>.Check(L, pos + 1) && TypeTraits<T3>.Check(L, pos + 2);
+            return TypeTraits<T1>.check(L, pos) && TypeTraits<T2>.check(L, pos + 1) && TypeTraits<T3>.check(L, pos + 2);
         }
 
         public static bool CheckTypes<T1, T2, T3, T4>(IntPtr L, int pos)
         {
-            return TypeTraits<T1>.Check(L, pos) && TypeTraits<T2>.Check(L, pos + 1) && TypeTraits<T3>.Check(L, pos + 2) && TypeTraits<T4>.Check(L, pos + 3);
+            return TypeTraits<T1>.check(L, pos) && TypeTraits<T2>.check(L, pos + 1) && TypeTraits<T3>.check(L, pos + 2) && TypeTraits<T4>.check(L, pos + 3);
         }
 
         public static bool CheckTypes<T1, T2, T3, T4, T5>(IntPtr L, int pos)
         {
-            return TypeTraits<T1>.Check(L, pos) && TypeTraits<T2>.Check(L, pos + 1) && TypeTraits<T3>.Check(L, pos + 2) && TypeTraits<T4>.Check(L, pos + 3) && TypeTraits<T5>.Check(L, pos + 4);
+            return TypeTraits<T1>.check(L, pos) && TypeTraits<T2>.check(L, pos + 1) && TypeTraits<T3>.check(L, pos + 2) && TypeTraits<T4>.check(L, pos + 3) && TypeTraits<T5>.check(L, pos + 4);
         }
 
         public static bool CheckTypes<T1, T2, T3, T4, T5, T6>(IntPtr L, int pos)
         {
-            return TypeTraits<T1>.Check(L, pos) && TypeTraits<T2>.Check(L, pos + 1) && TypeTraits<T3>.Check(L, pos + 2) && TypeTraits<T4>.Check(L, pos + 3) && TypeTraits<T5>.Check(L, pos + 4) &&
-                TypeTraits<T6>.Check(L, pos + 5);
+            return TypeTraits<T1>.check(L, pos) && TypeTraits<T2>.check(L, pos + 1) && TypeTraits<T3>.check(L, pos + 2) && TypeTraits<T4>.check(L, pos + 3) && TypeTraits<T5>.check(L, pos + 4) &&
+                TypeTraits<T6>.check(L, pos + 5);
         }
 
         public static bool CheckTypes<T1, T2, T3, T4, T5, T6, T7>(IntPtr L, int pos)
         {
-            return TypeTraits<T1>.Check(L, pos) && TypeTraits<T2>.Check(L, pos + 1) && TypeTraits<T3>.Check(L, pos + 2) && TypeTraits<T4>.Check(L, pos + 3) && TypeTraits<T5>.Check(L, pos + 4) &&
-                TypeTraits<T6>.Check(L, pos + 5) && TypeTraits<T7>.Check(L, pos + 6);
+            return TypeTraits<T1>.check(L, pos) && TypeTraits<T2>.check(L, pos + 1) && TypeTraits<T3>.check(L, pos + 2) && TypeTraits<T4>.check(L, pos + 3) && TypeTraits<T5>.check(L, pos + 4) &&
+                TypeTraits<T6>.check(L, pos + 5) && TypeTraits<T7>.check(L, pos + 6);
         }
 
         public static bool CheckTypes<T1, T2, T3, T4, T5, T6, T7, T8>(IntPtr L, int pos)
         {
-            return TypeTraits<T1>.Check(L, pos) && TypeTraits<T2>.Check(L, pos + 1) && TypeTraits<T3>.Check(L, pos + 2) && TypeTraits<T4>.Check(L, pos + 3) && TypeTraits<T5>.Check(L, pos + 4) &&
-                TypeTraits<T6>.Check(L, pos + 5) && TypeTraits<T7>.Check(L, pos + 6) && TypeTraits<T8>.Check(L, pos + 7);
+            return TypeTraits<T1>.check(L, pos) && TypeTraits<T2>.check(L, pos + 1) && TypeTraits<T3>.check(L, pos + 2) && TypeTraits<T4>.check(L, pos + 3) && TypeTraits<T5>.check(L, pos + 4) &&
+                TypeTraits<T6>.check(L, pos + 5) && TypeTraits<T7>.check(L, pos + 6) && TypeTraits<T8>.check(L, pos + 7);
         }
 
         public static bool CheckTypes<T1, T2, T3, T4, T5, T6, T7, T8, T9>(IntPtr L, int pos)
         {
-            return TypeTraits<T1>.Check(L, pos) && TypeTraits<T2>.Check(L, pos + 1) && TypeTraits<T3>.Check(L, pos + 2) && TypeTraits<T4>.Check(L, pos + 3) && TypeTraits<T5>.Check(L, pos + 4) &&
-                TypeTraits<T6>.Check(L, pos + 5) && TypeTraits<T7>.Check(L, pos + 6) && TypeTraits<T8>.Check(L, pos + 7) && TypeTraits<T9>.Check(L, pos + 8);
+            return TypeTraits<T1>.check(L, pos) && TypeTraits<T2>.check(L, pos + 1) && TypeTraits<T3>.check(L, pos + 2) && TypeTraits<T4>.check(L, pos + 3) && TypeTraits<T5>.check(L, pos + 4) &&
+                TypeTraits<T6>.check(L, pos + 5) && TypeTraits<T7>.check(L, pos + 6) && TypeTraits<T8>.check(L, pos + 7) && TypeTraits<T9>.check(L, pos + 8);
         }
 
         public static bool CheckTypes<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(IntPtr L, int pos)
         {
-            return TypeTraits<T1>.Check(L, pos) && TypeTraits<T2>.Check(L, pos + 1) && TypeTraits<T3>.Check(L, pos + 2) && TypeTraits<T4>.Check(L, pos + 3) && TypeTraits<T5>.Check(L, pos + 4) &&
-                TypeTraits<T6>.Check(L, pos + 5) && TypeTraits<T7>.Check(L, pos + 6) && TypeTraits<T8>.Check(L, pos + 7) && TypeTraits<T9>.Check(L, pos + 8) && TypeTraits<T10>.Check(L, pos + 9);
+            return TypeTraits<T1>.check(L, pos) && TypeTraits<T2>.check(L, pos + 1) && TypeTraits<T3>.check(L, pos + 2) && TypeTraits<T4>.check(L, pos + 3) && TypeTraits<T5>.check(L, pos + 4) &&
+                TypeTraits<T6>.check(L, pos + 5) && TypeTraits<T7>.check(L, pos + 6) && TypeTraits<T8>.check(L, pos + 7) && TypeTraits<T9>.check(L, pos + 8) && TypeTraits<T10>.check(L, pos + 9);
         }
 
         public static bool CheckTypes<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(IntPtr L, int pos)
         {
-            return TypeTraits<T1>.Check(L, pos) && TypeTraits<T2>.Check(L, pos + 1) && TypeTraits<T3>.Check(L, pos + 2) && TypeTraits<T4>.Check(L, pos + 3) && TypeTraits<T5>.Check(L, pos + 4) &&
-                TypeTraits<T6>.Check(L, pos + 5) && TypeTraits<T7>.Check(L, pos + 6) && TypeTraits<T8>.Check(L, pos + 7) && TypeTraits<T9>.Check(L, pos + 8) && TypeTraits<T10>.Check(L, pos + 9) &&
-                TypeTraits<T11>.Check(L, pos + 10);
+            return TypeTraits<T1>.check(L, pos) && TypeTraits<T2>.check(L, pos + 1) && TypeTraits<T3>.check(L, pos + 2) && TypeTraits<T4>.check(L, pos + 3) && TypeTraits<T5>.check(L, pos + 4) &&
+                TypeTraits<T6>.check(L, pos + 5) && TypeTraits<T7>.check(L, pos + 6) && TypeTraits<T8>.check(L, pos + 7) && TypeTraits<T9>.check(L, pos + 8) && TypeTraits<T10>.check(L, pos + 9) &&
+                TypeTraits<T11>.check(L, pos + 10);
         }
 
         public static bool CheckTypes<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(IntPtr L, int pos)
         {
-            return TypeTraits<T1>.Check(L, pos) && TypeTraits<T2>.Check(L, pos + 1) && TypeTraits<T3>.Check(L, pos + 2) && TypeTraits<T4>.Check(L, pos + 3) && TypeTraits<T5>.Check(L, pos + 4) &&
-                TypeTraits<T6>.Check(L, pos + 5) && TypeTraits<T7>.Check(L, pos + 6) && TypeTraits<T8>.Check(L, pos + 7) && TypeTraits<T9>.Check(L, pos + 8) && TypeTraits<T10>.Check(L, pos + 9) &&
-                TypeTraits<T11>.Check(L, pos + 10) && TypeTraits<T12>.Check(L, pos + 11);
+            return TypeTraits<T1>.check(L, pos) && TypeTraits<T2>.check(L, pos + 1) && TypeTraits<T3>.check(L, pos + 2) && TypeTraits<T4>.check(L, pos + 3) && TypeTraits<T5>.check(L, pos + 4) &&
+                TypeTraits<T6>.check(L, pos + 5) && TypeTraits<T7>.check(L, pos + 6) && TypeTraits<T8>.check(L, pos + 7) && TypeTraits<T9>.check(L, pos + 8) && TypeTraits<T10>.check(L, pos + 9) &&
+                TypeTraits<T11>.check(L, pos + 10) && TypeTraits<T12>.check(L, pos + 11);
         }
 
         public static bool CheckParamsType<T>(IntPtr L, int begin, int count)
@@ -401,7 +400,7 @@ namespace LuaInterface
 
             for (int i = 0; i < count; i++)
             {
-                if (!TypeTraits<T>.Check(L, i + begin))
+                if (!TypeTraits<T>.check(L, i + begin))
                 {
                     return false;
                 }

@@ -11,7 +11,7 @@ public class UnityEngine_QueueModeWrap
 		L.RegVar("PlayNow", get_PlayNow, null);
 		L.RegFunction("IntToEnum", IntToEnum);
 		L.EndEnum();
-		TypeTraits<UnityEngine.QueueMode>.Check = CheckType;
+		TypeTraits<UnityEngine.QueueMode>.check = CheckType;
 		StackTraits<UnityEngine.QueueMode>.Push = Push;
 	}
 
